@@ -106,7 +106,7 @@ namespace {
             }
         }
 
-        void on_draw(Hooray::Renderer render) override {
+        void on_draw(Hooray::Renderer& render) override {
             render.clearBackground(Hooray::Palette::CharBlack);
 
             // Standard screen-space rendering context via Layer2d

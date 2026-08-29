@@ -15,6 +15,7 @@ namespace Hooray {
         void drawLine(Vector2 start, Vector2 end, float thickness, Color color) const;
         void drawCircle(Vector2 center, float radius, Color color) const;
         void drawRectangle(Rectangle rect, Color color) const;
+        void drawText(std::string text) const;
 
     private:
         std::vector<Command>& command_queue_;
@@ -37,6 +38,11 @@ namespace Hooray {
             command_queue_.emplace_back(EndMode2DCmd{});
         }
 
+        template <typename Func>
+        void withScreenSpace(Func&& func) const {
+            func(Layer2d(command_queue_));
+        }
+
     private:
         std::vector<Command>& command_queue_;
     };
@@ -49,7 +55,7 @@ namespace Hooray {
 
         virtual void on_init() {}
         virtual void on_update(float delta_time) {}
-        virtual void on_draw(Renderer render) {}
+        virtual void on_draw(Renderer& render) {}
 
         virtual void on_key_pressed(int key) {}
         virtual void on_mouse_moved(Vector2 vector2) {}
@@ -66,7 +72,7 @@ namespace Hooray {
         int height_;
         std::string title_;
         bool is_running_{ true };
-        std::vector<Command> command_queue_{1024};
+        std::vector<Command> command_queue_{};
 
     };
 

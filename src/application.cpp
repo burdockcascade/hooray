@@ -118,13 +118,27 @@ namespace Hooray {
         command_queue_.emplace_back(DrawRectangleCmd{.rect = rect, .color = color});
     }
 
+    void Layer2d::drawText(std::string text) const {
+        command_queue_.emplace_back(DrawTextCmd{
+            .text = std::move(text),
+            .position = Vector2{0.0f, 0.0f},
+            .font_size = 20.0f,
+            .spacing = 1.0f,
+            .color = Palette::White
+        });
+    }
+
     void Application::run() {
+
+        command_queue_.reserve(1024);
 
         InitWindow(width_, height_, title_.c_str());
         InitAudioDevice();
         SetTargetFPS(60);
 
         on_init();
+
+        auto render = Renderer{command_queue_};
 
         while (!WindowShouldClose()) {
 
@@ -156,8 +170,6 @@ namespace Hooray {
 
             // Update
             on_update(delta_time);
-
-            auto render = Renderer{command_queue_};
 
             // Draw
             BeginDrawing();
