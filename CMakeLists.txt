@@ -23,6 +23,7 @@ add_library(hooray STATIC
         src/application.cpp
         src/color.cpp
         src/geometry.cpp
+        src/conversion.cpp
 )
 
 target_include_directories(hooray PUBLIC

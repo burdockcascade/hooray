@@ -1,5 +1,6 @@
 #include "conversion.hpp"
 #include "types.hpp"
+#include "raylib.h"
 
 namespace Hooray {
 
