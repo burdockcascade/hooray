@@ -20,7 +20,8 @@ set(BUILD_GAMES OFF CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(raylib)
 
 add_library(hooray STATIC
-        src/engine.cpp
+        src/application.cpp
+        src/color.cpp
 )
 
 target_include_directories(hooray PUBLIC
@@ -31,3 +32,4 @@ target_include_directories(hooray PUBLIC
 target_compile_features(hooray PUBLIC cxx_std_23)
 target_link_libraries(hooray PUBLIC raylib)
 
+add_subdirectory(examples)
