@@ -20,9 +20,9 @@ namespace Hooray {
         std::vector<Command>& command_queue_;
     };
 
-    class Render {
+    class Renderer {
     public:
-        explicit Render(std::vector<Command>& command_queue): command_queue_(command_queue) {}
+        explicit Renderer(std::vector<Command>& command_queue): command_queue_(command_queue) {}
 
         void drawFPS(Vector2 position) const {
             command_queue_.emplace_back(DrawFPSCmd{position});
@@ -49,7 +49,7 @@ namespace Hooray {
 
         virtual void on_init() {}
         virtual void on_update(float delta_time) {}
-        virtual void on_draw(Render render) {}
+        virtual void on_draw(Renderer render) {}
 
         virtual void on_key_pressed(int key) {}
         virtual void on_mouse_moved(Vector2 vector2) {}

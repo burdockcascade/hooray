@@ -102,7 +102,7 @@ namespace Hooray {
         }
     }
 
-    void Render::clearBackground(Color color) const {
+    void Renderer::clearBackground(Color color) const {
         command_queue_.emplace_back(ClearBackgroundCmd{color});
     }
 
@@ -157,7 +157,7 @@ namespace Hooray {
             // Update
             on_update(delta_time);
 
-            auto render = Render{command_queue_};
+            auto render = Renderer{command_queue_};
 
             // Draw
             BeginDrawing();
