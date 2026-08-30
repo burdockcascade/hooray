@@ -1,5 +1,5 @@
 #pragma once
-#include "types.hpp"
+#include "../include/types.hpp"
 
 struct Color;
 struct Vector2;
