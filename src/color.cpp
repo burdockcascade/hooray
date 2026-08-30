@@ -1,6 +1,6 @@
 #include <algorithm>
 #include <cmath>
-#include "types.hpp"
+#include "hoo_types.hpp"
 
 namespace Hooray {
 

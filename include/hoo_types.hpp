@@ -14,7 +14,7 @@ namespace Hooray {
 
 #pragma region Color
 
-    class   Color {
+    class Color {
     public:
         unsigned char r{0};
         unsigned char g{0};
@@ -67,13 +67,6 @@ namespace Hooray {
         constexpr bool operator==(const Color& rhs) const noexcept {
             return r == rhs.r && g == rhs.g && b == rhs.b && a == rhs.a;
         }
-
-        friend std::ostream& operator<<(std::ostream& os, const Color& c) {
-            return os << "Color(" << static_cast<int>(c.r) << ", "
-                      << static_cast<int>(c.g) << ", "
-                      << static_cast<int>(c.b) << ", "
-                      << static_cast<int>(c.a) << ")";
-        }
     };
 
 #pragma endregion
@@ -124,26 +117,24 @@ namespace Hooray {
         }
         Vector2& ApplyRotate(float angleRad) noexcept;
 
-        constexpr Vector2 operator+(Vector2 rhs) const noexcept { return {x + rhs.x, y + rhs.y}; }
-        constexpr Vector2 operator-(Vector2 rhs) const noexcept { return {x - rhs.x, y - rhs.y}; }
-        constexpr Vector2 operator*(Vector2 rhs) const noexcept { return {x * rhs.x, y * rhs.y}; }
-        constexpr Vector2 operator*(float scalar) const noexcept { return {x * scalar, y * scalar}; }
-        constexpr Vector2 operator/(Vector2 rhs) const noexcept { return {x / rhs.x, y / rhs.y}; }
-        constexpr Vector2 operator/(float scalar) const noexcept { return {x / scalar, y / scalar}; }
-        constexpr Vector2 operator-() const noexcept { return {-x, -y}; }
+        // Operators implemented in CPP via raymath
+        Vector2 operator+(Vector2 rhs) const noexcept;
+        Vector2 operator-(Vector2 rhs) const noexcept;
+        Vector2 operator*(Vector2 rhs) const noexcept;
+        Vector2 operator*(float scalar) const noexcept;
+        Vector2 operator/(Vector2 rhs) const noexcept;
+        Vector2 operator/(float scalar) const noexcept;
+        Vector2 operator-() const noexcept;
 
-        constexpr Vector2& operator+=(Vector2 rhs) noexcept { x += rhs.x; y += rhs.y; return *this; }
-        constexpr Vector2& operator-=(Vector2 rhs) noexcept { x -= rhs.x; y -= rhs.y; return *this; }
-        constexpr Vector2& operator*=(Vector2 rhs) noexcept { x *= rhs.x; y *= rhs.y; return *this; }
-        constexpr Vector2& operator*=(float scalar) noexcept { x *= scalar; y *= scalar; return *this; }
-        constexpr Vector2& operator/=(Vector2 rhs) noexcept { x /= rhs.x; y /= rhs.y; return *this; }
-        constexpr Vector2& operator/=(float scalar) noexcept { x /= scalar; y /= scalar; return *this; }
+        Vector2& operator+=(Vector2 rhs) noexcept;
+        Vector2& operator-=(Vector2 rhs) noexcept;
+        Vector2& operator*=(Vector2 rhs) noexcept;
+        Vector2& operator*=(float scalar) noexcept;
+        Vector2& operator/=(Vector2 rhs) noexcept;
+        Vector2& operator/=(float scalar) noexcept;
 
         bool operator==(const Vector2& rhs) const noexcept = default;
 
-        friend std::ostream& operator<<(std::ostream& os, const Vector2& v) {
-            return os << "Vector2(" << v.x << ", " << v.y << ")";
-        }
     };
 
     class Vector3 {
@@ -193,26 +184,24 @@ namespace Hooray {
             return *this;
         }
 
-        constexpr Vector3 operator+(Vector3 rhs) const noexcept { return {x + rhs.x, y + rhs.y, z + rhs.z}; }
-        constexpr Vector3 operator-(Vector3 rhs) const noexcept { return {x - rhs.x, y - rhs.y, z - rhs.z}; }
-        constexpr Vector3 operator*(Vector3 rhs) const noexcept { return {x * rhs.x, y * rhs.y, z * rhs.z}; }
-        constexpr Vector3 operator*(float scalar) const noexcept { return {x * scalar, y * scalar, z * scalar}; }
-        constexpr Vector3 operator/(Vector3 rhs) const noexcept { return {x / rhs.x, y / rhs.y, z / rhs.z}; }
-        constexpr Vector3 operator/(float scalar) const noexcept { return {x / scalar, y / scalar, z / scalar}; }
-        constexpr Vector3 operator-() const noexcept { return {-x, -y, -z}; }
+        // Operators implemented in CPP via raymath
+        Vector3 operator+(Vector3 rhs) const noexcept;
+        Vector3 operator-(Vector3 rhs) const noexcept;
+        Vector3 operator*(Vector3 rhs) const noexcept;
+        Vector3 operator*(float scalar) const noexcept;
+        Vector3 operator/(Vector3 rhs) const noexcept;
+        Vector3 operator/(float scalar) const noexcept;
+        Vector3 operator-() const noexcept;
 
-        constexpr Vector3& operator+=(Vector3 rhs) noexcept { x += rhs.x; y += rhs.y; z += rhs.z; return *this; }
-        constexpr Vector3& operator-=(Vector3 rhs) noexcept { x -= rhs.x; y -= rhs.y; z -= rhs.z; return *this; }
-        constexpr Vector3& operator*=(Vector3 rhs) noexcept { x *= rhs.x; y *= rhs.y; z *= rhs.z; return *this; }
-        constexpr Vector3& operator*=(float scalar) noexcept { x *= scalar; y *= scalar; z *= scalar; return *this; }
-        constexpr Vector3& operator/=(Vector3 rhs) noexcept { x /= rhs.x; y /= rhs.y; z /= rhs.z; return *this; }
-        constexpr Vector3& operator/=(float scalar) noexcept { x /= scalar; y /= scalar; z /= scalar; return *this; }
+        Vector3& operator+=(Vector3 rhs) noexcept;
+        Vector3& operator-=(Vector3 rhs) noexcept;
+        Vector3& operator*=(Vector3 rhs) noexcept;
+        Vector3& operator*=(float scalar) noexcept;
+        Vector3& operator/=(Vector3 rhs) noexcept;
+        Vector3& operator/=(float scalar) noexcept;
 
         bool operator==(const Vector3& rhs) const noexcept = default;
 
-        friend std::ostream& operator<<(std::ostream& os, const Vector3& v) {
-            return os << "Vector3(" << v.x << ", " << v.y << ", " << v.z << ")";
-        }
     };
 
     class Vector4 {
@@ -251,26 +240,24 @@ namespace Hooray {
             return *this;
         }
 
-        constexpr Vector4 operator+(Vector4 rhs) const noexcept { return {x + rhs.x, y + rhs.y, z + rhs.z, w + rhs.w}; }
-        constexpr Vector4 operator-(Vector4 rhs) const noexcept { return {x - rhs.x, y - rhs.y, z - rhs.z, w - rhs.w}; }
-        constexpr Vector4 operator*(Vector4 rhs) const noexcept { return {x * rhs.x, y * rhs.y, z * rhs.z, w * rhs.w}; }
-        constexpr Vector4 operator*(float scalar) const noexcept { return {x * scalar, y * scalar, z * scalar, w * scalar}; }
-        constexpr Vector4 operator/(Vector4 rhs) const noexcept { return {x / rhs.x, y / rhs.y, z / rhs.z, w / rhs.w}; }
-        constexpr Vector4 operator/(float scalar) const noexcept { return {x / scalar, y / scalar, z / scalar, w / scalar}; }
-        constexpr Vector4 operator-() const noexcept { return {-x, -y, -z, -w}; }
+        // Operators implemented in CPP via raymath
+        Vector4 operator+(Vector4 rhs) const noexcept;
+        Vector4 operator-(Vector4 rhs) const noexcept;
+        Vector4 operator*(Vector4 rhs) const noexcept;
+        Vector4 operator*(float scalar) const noexcept;
+        Vector4 operator/(Vector4 rhs) const noexcept;
+        Vector4 operator/(float scalar) const noexcept;
+        Vector4 operator-() const noexcept;
 
-        constexpr Vector4& operator+=(Vector4 rhs) noexcept { x += rhs.x; y += rhs.y; z += rhs.z; w += rhs.w; return *this; }
-        constexpr Vector4& operator-=(Vector4 rhs) noexcept { x -= rhs.x; y -= rhs.y; z -= rhs.z; w -= rhs.w; return *this; }
-        constexpr Vector4& operator*=(Vector4 rhs) noexcept { x *= rhs.x; y *= rhs.y; z *= rhs.z; w *= rhs.w; return *this; }
-        constexpr Vector4& operator*=(float scalar) noexcept { x *= scalar; y *= scalar; z *= scalar; w *= scalar; return *this; }
-        constexpr Vector4& operator/=(Vector4 rhs) noexcept { x /= rhs.x; y /= rhs.y; z /= rhs.z; w /= rhs.w; return *this; }
-        constexpr Vector4& operator/=(float scalar) noexcept { x /= scalar; y /= scalar; z /= scalar; w /= scalar; return *this; }
+        Vector4& operator+=(Vector4 rhs) noexcept;
+        Vector4& operator-=(Vector4 rhs) noexcept;
+        Vector4& operator*=(Vector4 rhs) noexcept;
+        Vector4& operator*=(float scalar) noexcept;
+        Vector4& operator/=(Vector4 rhs) noexcept;
+        Vector4& operator/=(float scalar) noexcept;
 
         bool operator==(const Vector4& rhs) const noexcept = default;
 
-        friend std::ostream& operator<<(std::ostream& os, const Vector4& v) {
-            return os << "Vector4(" << v.x << ", " << v.y << ", " << v.z << ", " << v.w << ")";
-        }
     };
 
     class Matrix {
@@ -315,22 +302,12 @@ namespace Hooray {
         Matrix& ApplyTranspose() noexcept;
         Matrix& ApplyInvert() noexcept;
 
-        constexpr Matrix operator+(Matrix rhs) const noexcept {
-            return Matrix{ m0+rhs.m0, m4+rhs.m4, m8+rhs.m8,   m12+rhs.m12,
-                           m1+rhs.m1, m5+rhs.m5, m9+rhs.m9,   m13+rhs.m13,
-                           m2+rhs.m2, m6+rhs.m6, m10+rhs.m10, m14+rhs.m14,
-                           m3+rhs.m3, m7+rhs.m7, m11+rhs.m11, m15+rhs.m15 };
-        }
-        constexpr Matrix operator-(Matrix rhs) const noexcept {
-            return Matrix{ m0-rhs.m0, m4-rhs.m4, m8-rhs.m8,   m12-rhs.m12,
-                           m1-rhs.m1, m5-rhs.m5, m9-rhs.m9,   m13-rhs.m13,
-                           m2-rhs.m2, m6-rhs.m6, m10-rhs.m10, m14-rhs.m14,
-                           m3-rhs.m3, m7-rhs.m7, m11-rhs.m11, m15-rhs.m15 };
-        }
+        Matrix operator+(Matrix rhs) const noexcept;
+        Matrix operator-(Matrix rhs) const noexcept;
         Matrix operator*(Matrix rhs) const noexcept;
 
-        constexpr Matrix& operator+=(Matrix rhs) noexcept { *this = *this + rhs; return *this; }
-        constexpr Matrix& operator-=(Matrix rhs) noexcept { *this = *this - rhs; return *this; }
+        Matrix& operator+=(Matrix rhs) noexcept;
+        Matrix& operator-=(Matrix rhs) noexcept;
         Matrix& operator*=(Matrix rhs) noexcept;
 
         constexpr bool operator==(const Matrix& rhs) const noexcept {
@@ -339,19 +316,11 @@ namespace Hooray {
                    m2 == rhs.m2 && m6 == rhs.m6 && m10 == rhs.m10 && m14 == rhs.m14 &&
                    m3 == rhs.m3 && m7 == rhs.m7 && m11 == rhs.m11 && m15 == rhs.m15;
         }
-
-        friend std::ostream& operator<<(std::ostream& os, const Matrix& m) {
-            return os << "Matrix[\n"
-                      << "  " << m.m0 << ", " << m.m4 << ", " << m.m8  << ", " << m.m12 << "\n"
-                      << "  " << m.m1 << ", " << m.m5 << ", " << m.m9  << ", " << m.m13 << "\n"
-                      << "  " << m.m2 << ", " << m.m6 << ", " << m.m10 << ", " << m.m14 << "\n"
-                      << "  " << m.m3 << ", " << m.m7 << ", " << m.m11 << ", " << m.m15 << "\n]";
-        }
     };
 
-    constexpr Vector2 operator*(float scalar, Vector2 vec) noexcept { return vec * scalar; }
-    constexpr Vector3 operator*(float scalar, Vector3 vec) noexcept { return vec * scalar; }
-    constexpr Vector4 operator*(float scalar, Vector4 vec) noexcept { return vec * scalar; }
+    Vector2 operator*(float scalar, Vector2 vec) noexcept;
+    Vector3 operator*(float scalar, Vector3 vec) noexcept;
+    Vector4 operator*(float scalar, Vector4 vec) noexcept;
 
 #pragma endregion
 
@@ -388,9 +357,6 @@ namespace Hooray {
             return x == rhs.x && y == rhs.y && width == rhs.width && height == rhs.height;
         }
 
-        friend std::ostream& operator<<(std::ostream& os, const Rectangle& r) {
-            return os << "Rectangle(" << r.x << ", " << r.y << ", " << r.width << ", " << r.height << ")";
-        }
     };
 
     struct Circle {
@@ -404,7 +370,6 @@ namespace Hooray {
         [[nodiscard]] bool contains(Vector2 other) const;
         [[nodiscard]] bool overlaps(Circle other) const;
         [[nodiscard]] bool overlaps(Rectangle other) const;
-
     };
 
     struct JSTriangle {
@@ -441,7 +406,6 @@ namespace Hooray {
     struct MusicHandle   { void* id{ nullptr }; };
 
     namespace Palette {
-
         // Grays & Neutrals
         constexpr Color White{255, 255, 255, 255};
         constexpr Color Snow{255, 250, 250, 255};

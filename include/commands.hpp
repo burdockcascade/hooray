@@ -4,7 +4,7 @@
 #include <variant>
 #include <type_traits>
 #include <string>
-#include <types.hpp>
+#include <hoo_types.hpp>
 
 namespace Hooray {
 
