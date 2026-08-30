@@ -2,6 +2,8 @@
 
 namespace {
 
+    constexpr auto text_pos = Hooray::Vector2{0.0f, 0.0f};
+
     class SimpleApp : public Hooray::Application {
 
     public:
@@ -19,7 +21,7 @@ namespace {
             render.clearBackground(Hooray::Palette::CharBlack);
 
             render.withScreenSpace([](Hooray::Layer2d layer) {
-                layer.drawText("Hello, World");
+                layer.drawText("Hello, World", text_pos);
             });
         }
     };

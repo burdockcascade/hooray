@@ -15,3 +15,13 @@ target_link_libraries(swarm PRIVATE hooray)
 set_target_properties(swarm PROPERTIES
         VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/.."
 )
+
+########################
+
+add_executable(mouse mouse.cpp)
+
+target_link_libraries(mouse PRIVATE hooray)
+
+set_target_properties(mouse PROPERTIES
+        VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/.."
+)
