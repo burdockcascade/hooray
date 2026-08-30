@@ -1,9 +1,12 @@
 #include "conversion.hpp"
-#include "hoo_types.hpp"
+#include "hr_types.hpp"
 #include "raylib.h"
 #include "raymath.h"
 
 namespace Hooray {
+
+#pragma region Vector2
+
     // --- Vector2 Operators ---
     Vector2 Vector2::operator+(Vector2 rhs) const noexcept {
         return FromRay(::Vector2Add(ToRay(*this), ToRay(rhs)));
@@ -67,6 +70,23 @@ namespace Hooray {
         return vec * scalar;
     }
 
+    float Vector2::GetAngle(Vector2 other) const noexcept {
+        return ::Vector2Angle(ToRay(*this), ToRay(other));
+    }
+
+    Vector2 Vector2::GetRotated(float angleRad) const noexcept {
+        return FromRay(::Vector2Rotate(ToRay(*this), angleRad));
+    }
+
+    Vector2& Vector2::ApplyRotate(float angleRad) noexcept {
+        *this = GetRotated(angleRad);
+        return *this;
+    }
+
+#pragma endregion
+
+#pragma region Vector3
+
     // --- Vector3 Operators ---
     Vector3 Vector3::operator+(Vector3 rhs) const noexcept {
         return FromRay(::Vector3Add(ToRay(*this), ToRay(rhs)));
@@ -129,6 +149,12 @@ namespace Hooray {
     Vector3 operator*(float scalar, Vector3 vec) noexcept {
         return vec * scalar;
     }
+
+    float Vector3::GetAngle(Vector3 other) const noexcept {
+        return ::Vector3Angle(ToRay(*this), ToRay(other));
+    }
+
+#pragma endregion
 
     // --- Vector4 Operators ---
     Vector4 Vector4::operator+(Vector4 rhs) const noexcept {
@@ -281,7 +307,16 @@ namespace Hooray {
         return *this;
     }
 
+    bool Matrix::operator==(const Matrix& rhs) const noexcept {
+        return m0 == rhs.m0 && m4 == rhs.m4 && m8  == rhs.m8  && m12 == rhs.m12 &&
+               m1 == rhs.m1 && m5 == rhs.m5 && m9  == rhs.m9  && m13 == rhs.m13 &&
+               m2 == rhs.m2 && m6 == rhs.m6 && m10 == rhs.m10 && m14 == rhs.m14 &&
+               m3 == rhs.m3 && m7 == rhs.m7 && m11 == rhs.m11 && m15 == rhs.m15;
+    }
+
 #pragma endregion
+
+#pragma region Rectangle
 
     // --- Geometry ---
     bool Rectangle::Contains(Vector2 point) const noexcept {
@@ -296,6 +331,10 @@ namespace Hooray {
         return FromRay(GetCollisionRec(ToRay(*this), ToRay(other)));
     }
 
+#pragma endregion
+
+#pragma region Circle
+
     bool Circle::contains(const Vector2 other) const {
         return ::CheckCollisionPointCircle(ToRay(other), ToRay(this->center), this->radius);
     }
@@ -307,5 +346,86 @@ namespace Hooray {
     bool Circle::overlaps(const Rectangle other) const {
         return ::CheckCollisionCircleRec(ToRay(this->center), this->radius, ToRay(other));
     }
+
+#pragma endregion
+
+#pragma region Color Methods
+
+    Vector4 Color::ToVector4() const noexcept {
+        return FromRay(::ColorNormalize(ToRay(*this)));
+    }
+
+    std::uint32_t Color::ToInt() const noexcept {
+        return ::ColorToInt(ToRay(*this));
+    }
+
+    Color Color::FromNormalized(Vector4 normalized) noexcept {
+        return FromRay(::ColorFromNormalized(ToRay(normalized)));
+    }
+
+    Color Color::FromHSV(float hue, float saturation, float value) noexcept {
+        return FromRay(::ColorFromHSV(hue, saturation, value));
+    }
+
+    Vector3 Color::ToHSV() const noexcept {
+        return FromRay(::ColorToHSV(ToRay(*this)));
+    }
+
+    Color Color::GetFade(float alpha) const noexcept {
+        return FromRay(::Fade(ToRay(*this), alpha));
+    }
+
+    Color Color::GetAlpha(float alpha) const noexcept {
+        Color result = *this;
+        result.a = static_cast<unsigned char>(std::clamp(alpha, 0.0f, 1.0f) * 255.0f);
+        return result;
+    }
+
+    Color Color::GetAlphaBlend(Color src, Color tint) const noexcept {
+        return FromRay(::ColorAlphaBlend(ToRay(*this), ToRay(src), ToRay(tint)));
+    }
+
+    Color Color::GetLerp(Color target, float factor) const noexcept {
+        return FromRay(::ColorLerp(ToRay(*this), ToRay(target), factor));
+    }
+
+    Color Color::GetTint(Color tint) const noexcept {
+        return FromRay(::ColorTint(ToRay(*this), ToRay(tint)));
+    }
+
+    Color Color::GetContrast(float contrast) const noexcept {
+        return FromRay(::ColorContrast(ToRay(*this), contrast));
+    }
+
+    Color Color::GetBrightness(float factor) const noexcept {
+        return FromRay(::ColorBrightness(ToRay(*this), factor));
+    }
+
+    Color& Color::ApplyFade(float alpha) noexcept {
+        *this = GetFade(alpha);
+        return *this;
+    }
+
+    Color& Color::ApplyAlpha(float alpha) noexcept {
+        *this = GetAlpha(alpha);
+        return *this;
+    }
+
+    Color& Color::ApplyTint(Color tint) noexcept {
+        *this = GetTint(tint);
+        return *this;
+    }
+
+    Color& Color::ApplyContrast(float contrast) noexcept {
+        *this = GetContrast(contrast);
+        return *this;
+    }
+
+    Color& Color::ApplyBrightness(float factor) noexcept {
+        *this = GetBrightness(factor);
+        return *this;
+    }
+
+#pragma endregion
 
 }

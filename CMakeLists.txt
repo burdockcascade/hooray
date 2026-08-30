@@ -22,7 +22,7 @@ FetchContent_MakeAvailable(raylib)
 add_library(hooray STATIC
         src/application.cpp
         src/color.cpp
-        src/hoo_types.cpp
+        src/hr_types.cpp
         src/conversion.cpp
 )
 

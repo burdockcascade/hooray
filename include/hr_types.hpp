@@ -310,12 +310,7 @@ namespace Hooray {
         Matrix& operator-=(Matrix rhs) noexcept;
         Matrix& operator*=(Matrix rhs) noexcept;
 
-        constexpr bool operator==(const Matrix& rhs) const noexcept {
-            return m0 == rhs.m0 && m4 == rhs.m4 && m8  == rhs.m8  && m12 == rhs.m12 &&
-                   m1 == rhs.m1 && m5 == rhs.m5 && m9  == rhs.m9  && m13 == rhs.m13 &&
-                   m2 == rhs.m2 && m6 == rhs.m6 && m10 == rhs.m10 && m14 == rhs.m14 &&
-                   m3 == rhs.m3 && m7 == rhs.m7 && m11 == rhs.m11 && m15 == rhs.m15;
-        }
+        bool operator==(const Matrix& rhs) const noexcept;
     };
 
     Vector2 operator*(float scalar, Vector2 vec) noexcept;
