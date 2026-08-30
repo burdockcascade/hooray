@@ -48,7 +48,8 @@ namespace Hooray {
                     ::DrawEllipseV(ToRay(arg.center), arg.radius_h, arg.radius_v, ToRay(arg.color));
                 },
                 [](const DrawTextCmd& arg) {
-                    ::DrawTextEx(ToRay(arg.font_face), arg.text.c_str(), ToRay(arg.position), arg.font_size, arg.spacing, ToRay(arg.color));
+                    const Font font = arg.font_face.id ? ToRay(arg.font_face) : ::GetFontDefault();
+                    ::DrawTextEx(font, arg.text.c_str(), ToRay(arg.position), arg.font_size, arg.spacing, ToRay(arg.color));
                 },
                 [](const DrawTextureCmd& arg) {
                     ::DrawTextureV(ToRay(arg.texture), ToRay(arg.position), ToRay(arg.tint));
