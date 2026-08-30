@@ -119,10 +119,10 @@ namespace Hooray {
         command_queue_.emplace_back(DrawRectangleCmd{.rect = rect, .color = color});
     }
 
-    void Layer2d::drawText(std::string text) const {
+    void Layer2d::drawText(std::string text, const Vector2 pos) const {
         command_queue_.emplace_back(DrawTextCmd{
             .text = std::move(text),
-            .position = Vector2{0.0f, 0.0f},
+            .position = pos,
             .font_size = 20.0f,
             .spacing = 1.0f,
             .color = Palette::White

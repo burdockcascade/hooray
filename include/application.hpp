@@ -15,7 +15,7 @@ namespace Hooray {
         void drawLine(Vector2 start, Vector2 end, float thickness, Color color) const;
         void drawCircle(Vector2 center, float radius, Color color) const;
         void drawRectangle(Rectangle rect, Color color) const;
-        void drawText(std::string text) const;
+        void drawText(std::string text, Vector2 pos) const;
 
     private:
         std::vector<Command>& command_queue_;
