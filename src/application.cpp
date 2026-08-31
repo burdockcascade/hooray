@@ -107,6 +107,18 @@ namespace Hooray {
         command_queue_.emplace_back(ClearBackgroundCmd{color});
     }
 
+    void Renderer::add_command(Command command) const {
+        command_queue_.emplace_back(std::move(command));
+    }
+
+    void Renderer::add_commands(std::vector<Command> commands) const {
+        command_queue_.insert(command_queue_.end(), std::make_move_iterator(commands.begin()), std::make_move_iterator(commands.end()));
+    }
+
+    void Renderer::clear_commands() const {
+        command_queue_.clear();
+    }
+
     void Layer2d::drawLine(const Vector2 start, const Vector2 end, const float thickness, const Color color) const {
         command_queue_.emplace_back(DrawLineCmd{.start = start, .end = end, .thickness = thickness, .color = color});
     }

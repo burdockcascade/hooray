@@ -25,6 +25,10 @@ namespace Hooray {
     public:
         explicit Renderer(std::vector<Command>& command_queue): command_queue_(command_queue) {}
 
+        void add_command(Command command) const;
+        void add_commands(std::vector<Command> commands) const;
+        void clear_commands() const;
+
         void drawFPS(Vector2 position) const {
             command_queue_.emplace_back(DrawFPSCmd{position});
         }
