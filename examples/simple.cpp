@@ -18,10 +18,10 @@ namespace {
         }
 
         void on_draw(Hooray::Renderer& render) override {
-            render.clearBackground(Hooray::Palette::CharBlack);
+            render.clear_background(Hooray::Palette::CharBlack);
 
-            render.withScreenSpace([](Hooray::Layer2d layer) {
-                layer.drawText("Hello, World", text_pos);
+            render.with_screen_space([](Hooray::Layer2d layer) {
+                layer.draw_text("Hello, World", text_pos);
             });
         }
     };

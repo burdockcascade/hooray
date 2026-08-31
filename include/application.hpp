@@ -12,10 +12,10 @@ namespace Hooray {
     public:
         explicit Layer2d(std::vector<Command>& command_queue): command_queue_(command_queue) {}
 
-        void drawLine(Vector2 start, Vector2 end, float thickness, Color color) const;
-        void drawCircle(Vector2 center, float radius, Color color) const;
-        void drawRectangle(Rectangle rect, Color color) const;
-        void drawText(std::string text, Vector2 pos) const;
+        void draw_line(Vector2 start, Vector2 end, float thickness, Color color) const;
+        void draw_circle(Vector2 center, float radius, Color color) const;
+        void draw_rectangle(Rectangle rect, Color color) const;
+        void draw_text(std::string text, Vector2 pos) const;
 
     private:
         std::vector<Command>& command_queue_;
@@ -29,21 +29,21 @@ namespace Hooray {
         void add_commands(std::vector<Command> commands) const;
         void clear_commands() const;
 
-        void drawFPS(Vector2 position) const {
+        void draw_fps(Vector2 position) const {
             command_queue_.emplace_back(DrawFPSCmd{position});
         }
 
-        void clearBackground(Color color) const;
+        void clear_background(Color color) const;
 
         template <typename Func>
-        void withLayer2d(const Camera2D &camera2d, Func&& func) const {
+        void with_layer_2d(const Camera2D &camera2d, Func&& func) const {
             command_queue_.emplace_back(BeginMode2DCmd{camera2d});
             func(Layer2d(command_queue_));
             command_queue_.emplace_back(EndMode2DCmd{});
         }
 
         template <typename Func>
-        void withScreenSpace(Func&& func) const {
+        void with_screen_space(Func&& func) const {
             func(Layer2d(command_queue_));
         }
 

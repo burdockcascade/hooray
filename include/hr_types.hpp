@@ -44,25 +44,25 @@ namespace Hooray {
               a{static_cast<unsigned char>(hexValue & 0xFF)} {}
 
         // Declarations requiring Raylib implementation in CPP
-        [[nodiscard]] Vector4 ToVector4() const noexcept;
-        [[nodiscard]] std::uint32_t ToInt() const noexcept;
-        [[nodiscard]] static Color FromNormalized(Vector4 normalized) noexcept;
-        [[nodiscard]] static Color FromHSV(float hue, float saturation, float value) noexcept;
-        [[nodiscard]] Vector3 ToHSV() const noexcept;
+        [[nodiscard]] Vector4 to_vector4() const noexcept;
+        [[nodiscard]] std::uint32_t to_int() const noexcept;
+        [[nodiscard]] static Color from_normalized(Vector4 normalized) noexcept;
+        [[nodiscard]] static Color from_hsv(float hue, float saturation, float value) noexcept;
+        [[nodiscard]] Vector3 to_hsv() const noexcept;
 
-        [[nodiscard]] Color GetFade(float alpha) const noexcept;
-        [[nodiscard]] Color GetAlpha(float alpha) const noexcept;
-        [[nodiscard]] Color GetAlphaBlend(Color src, Color tint) const noexcept;
-        [[nodiscard]] Color GetLerp(Color target, float factor) const noexcept;
-        [[nodiscard]] Color GetTint(Color tint) const noexcept;
-        [[nodiscard]] Color GetContrast(float contrast) const noexcept;
-        [[nodiscard]] Color GetBrightness(float factor) const noexcept;
+        [[nodiscard]] Color get_fade(float alpha) const noexcept;
+        [[nodiscard]] Color get_alpha(float alpha) const noexcept;
+        [[nodiscard]] Color get_alpha_blend(Color src, Color tint) const noexcept;
+        [[nodiscard]] Color get_lerp(Color target, float factor) const noexcept;
+        [[nodiscard]] Color get_tint(Color tint) const noexcept;
+        [[nodiscard]] Color get_contrast(float contrast) const noexcept;
+        [[nodiscard]] Color get_brightness(float factor) const noexcept;
 
-        Color& ApplyFade(float alpha) noexcept;
-        Color& ApplyAlpha(float alpha) noexcept;
-        Color& ApplyTint(Color tint) noexcept;
-        Color& ApplyContrast(float contrast) noexcept;
-        Color& ApplyBrightness(float factor) noexcept;
+        Color& apply_fade(float alpha) noexcept;
+        Color& apply_alpha(float alpha) noexcept;
+        Color& apply_tint(Color tint) noexcept;
+        Color& apply_contrast(float contrast) noexcept;
+        Color& apply_brightness(float factor) noexcept;
 
         constexpr bool operator==(const Color& rhs) const noexcept {
             return r == rhs.r && g == rhs.g && b == rhs.b && a == rhs.a;
@@ -82,40 +82,40 @@ namespace Hooray {
         constexpr Vector2(float val) noexcept : x{val}, y{val} {}
         constexpr Vector2(float x_, float y_) noexcept : x{x_}, y{y_} {}
 
-        [[nodiscard]] static constexpr Vector2 Zero() noexcept { return {0.0f, 0.0f}; }
-        [[nodiscard]] static constexpr Vector2 One() noexcept { return {1.0f, 1.0f}; }
-        [[nodiscard]] static constexpr Vector2 Up() noexcept { return {0.0f, -1.0f}; }
-        [[nodiscard]] static constexpr Vector2 Down() noexcept { return {0.0f, 1.0f}; }
-        [[nodiscard]] static constexpr Vector2 Left() noexcept { return {-1.0f, 0.0f}; }
-        [[nodiscard]] static constexpr Vector2 Right() noexcept { return {1.0f, 0.0f}; }
+        [[nodiscard]] static constexpr Vector2 zero() noexcept { return {0.0f, 0.0f}; }
+        [[nodiscard]] static constexpr Vector2 one() noexcept { return {1.0f, 1.0f}; }
+        [[nodiscard]] static constexpr Vector2 up() noexcept { return {0.0f, -1.0f}; }
+        [[nodiscard]] static constexpr Vector2 down() noexcept { return {0.0f, 1.0f}; }
+        [[nodiscard]] static constexpr Vector2 left() noexcept { return {-1.0f, 0.0f}; }
+        [[nodiscard]] static constexpr Vector2 right() noexcept { return {1.0f, 0.0f}; }
 
-        [[nodiscard]] float GetLength() const noexcept { return std::sqrt(x * x + y * y); }
-        [[nodiscard]] constexpr float GetLengthSqr() const noexcept { return x * x + y * y; }
-        [[nodiscard]] float GetDistance(Vector2 other) const noexcept { return (*this - other).GetLength(); }
-        [[nodiscard]] constexpr float GetDistanceSqr(Vector2 other) const noexcept { return (*this - other).GetLengthSqr(); }
-        [[nodiscard]] float GetAngle(Vector2 other) const noexcept;
+        [[nodiscard]] float get_length() const noexcept { return std::sqrt(x * x + y * y); }
+        [[nodiscard]] constexpr float get_length_sqr() const noexcept { return x * x + y * y; }
+        [[nodiscard]] float get_distance(Vector2 other) const noexcept { return (*this - other).get_length(); }
+        [[nodiscard]] constexpr float get_distance_sqr(Vector2 other) const noexcept { return (*this - other).get_length_sqr(); }
+        [[nodiscard]] float get_angle(Vector2 other) const noexcept;
 
-        [[nodiscard]] Vector2 GetNormalized() const noexcept {
-            float len = GetLength();
+        [[nodiscard]] Vector2 get_normalized() const noexcept {
+            float len = get_length();
             return (len > 0.0f) ? Vector2{x / len, y / len} : Vector2{0.0f, 0.0f};
         }
-        [[nodiscard]] Vector2 GetRotated(float angleRad) const noexcept;
-        [[nodiscard]] constexpr Vector2 GetLerp(Vector2 target, float amount) const noexcept {
+        [[nodiscard]] Vector2 get_rotated(float angleRad) const noexcept;
+        [[nodiscard]] constexpr Vector2 get_lerp(Vector2 target, float amount) const noexcept {
             return {x + amount * (target.x - x), y + amount * (target.y - y)};
         }
-        [[nodiscard]] constexpr Vector2 GetClamp(Vector2 min, Vector2 max) const noexcept {
+        [[nodiscard]] constexpr Vector2 get_clamp(Vector2 min, Vector2 max) const noexcept {
             return {std::clamp(x, min.x, max.x), std::clamp(y, min.y, max.y)};
         }
 
-        [[nodiscard]] constexpr float GetDot(Vector2 other) const noexcept { return x * other.x + y * other.y; }
-        [[nodiscard]] constexpr float GetCross(Vector2 other) const noexcept { return x * other.y - y * other.x; }
+        [[nodiscard]] constexpr float get_dot(Vector2 other) const noexcept { return x * other.x + y * other.y; }
+        [[nodiscard]] constexpr float get_cross(Vector2 other) const noexcept { return x * other.y - y * other.x; }
 
-        Vector2& ApplyNormalize() noexcept {
-            float len = GetLength();
+        Vector2& apply_normalize() noexcept {
+            float len = get_length();
             if (len > 0.0f) { x /= len; y /= len; }
             return *this;
         }
-        Vector2& ApplyRotate(float angleRad) noexcept;
+        Vector2& apply_rotate(float angleRad) noexcept;
 
         // Operators implemented in CPP via raymath
         Vector2 operator+(Vector2 rhs) const noexcept;
@@ -147,39 +147,39 @@ namespace Hooray {
         constexpr Vector3(float val) noexcept : x{val}, y{val}, z{val} {}
         constexpr Vector3(float x_, float y_, float z_) noexcept : x{x_}, y{y_}, z{z_} {}
 
-        [[nodiscard]] static constexpr Vector3 Zero() noexcept { return {0.0f, 0.0f, 0.0f}; }
-        [[nodiscard]] static constexpr Vector3 One() noexcept { return {1.0f, 1.0f, 1.0f}; }
-        [[nodiscard]] static constexpr Vector3 Up() noexcept { return {0.0f, 1.0f, 0.0f}; }
-        [[nodiscard]] static constexpr Vector3 Down() noexcept { return {0.0f, -1.0f, 0.0f}; }
-        [[nodiscard]] static constexpr Vector3 Left() noexcept { return {-1.0f, 0.0f, 0.0f}; }
-        [[nodiscard]] static constexpr Vector3 Right() noexcept { return {1.0f, 0.0f, 0.0f}; }
-        [[nodiscard]] static constexpr Vector3 Forward() noexcept { return {0.0f, 0.0f, 1.0f}; }
-        [[nodiscard]] static constexpr Vector3 Back() noexcept { return {0.0f, 0.0f, -1.0f}; }
+        [[nodiscard]] static constexpr Vector3 zero() noexcept { return {0.0f, 0.0f, 0.0f}; }
+        [[nodiscard]] static constexpr Vector3 one() noexcept { return {1.0f, 1.0f, 1.0f}; }
+        [[nodiscard]] static constexpr Vector3 up() noexcept { return {0.0f, 1.0f, 0.0f}; }
+        [[nodiscard]] static constexpr Vector3 down() noexcept { return {0.0f, -1.0f, 0.0f}; }
+        [[nodiscard]] static constexpr Vector3 left() noexcept { return {-1.0f, 0.0f, 0.0f}; }
+        [[nodiscard]] static constexpr Vector3 right() noexcept { return {1.0f, 0.0f, 0.0f}; }
+        [[nodiscard]] static constexpr Vector3 forward() noexcept { return {0.0f, 0.0f, 1.0f}; }
+        [[nodiscard]] static constexpr Vector3 back() noexcept { return {0.0f, 0.0f, -1.0f}; }
 
-        [[nodiscard]] float GetLength() const noexcept { return std::sqrt(x * x + y * y + z * z); }
-        [[nodiscard]] constexpr float GetLengthSqr() const noexcept { return x * x + y * y + z * z; }
-        [[nodiscard]] float GetDistance(Vector3 other) const noexcept { return (*this - other).GetLength(); }
-        [[nodiscard]] constexpr float GetDistanceSqr(Vector3 other) const noexcept { return (*this - other).GetLengthSqr(); }
-        [[nodiscard]] float GetAngle(Vector3 other) const noexcept;
+        [[nodiscard]] float get_length() const noexcept { return std::sqrt(x * x + y * y + z * z); }
+        [[nodiscard]] constexpr float get_length_sqr() const noexcept { return x * x + y * y + z * z; }
+        [[nodiscard]] float get_distance(Vector3 other) const noexcept { return (*this - other).get_length(); }
+        [[nodiscard]] constexpr float get_distance_sqr(Vector3 other) const noexcept { return (*this - other).get_length_sqr(); }
+        [[nodiscard]] float get_angle(Vector3 other) const noexcept;
 
-        [[nodiscard]] Vector3 GetNormalized() const noexcept {
-            float len = GetLength();
+        [[nodiscard]] Vector3 get_normalized() const noexcept {
+            float len = get_length();
             return (len > 0.0f) ? Vector3{x / len, y / len, z / len} : Vector3{0.0f, 0.0f, 0.0f};
         }
-        [[nodiscard]] constexpr Vector3 GetLerp(Vector3 target, float amount) const noexcept {
+        [[nodiscard]] constexpr Vector3 get_lerp(Vector3 target, float amount) const noexcept {
             return {x + amount * (target.x - x), y + amount * (target.y - y), z + amount * (target.z - z)};
         }
-        [[nodiscard]] constexpr Vector3 GetClamp(Vector3 min, Vector3 max) const noexcept {
+        [[nodiscard]] constexpr Vector3 get_clamp(Vector3 min, Vector3 max) const noexcept {
             return {std::clamp(x, min.x, max.x), std::clamp(y, min.y, max.y), std::clamp(z, min.z, max.z)};
         }
 
-        [[nodiscard]] constexpr float GetDot(Vector3 other) const noexcept { return x * other.x + y * other.y + z * other.z; }
-        [[nodiscard]] constexpr Vector3 GetCross(Vector3 other) const noexcept {
+        [[nodiscard]] constexpr float get_dot(Vector3 other) const noexcept { return x * other.x + y * other.y + z * other.z; }
+        [[nodiscard]] constexpr Vector3 get_cross(Vector3 other) const noexcept {
             return {y * other.z - z * other.y, z * other.x - x * other.z, x * other.y - y * other.x};
         }
 
-        Vector3& ApplyNormalize() noexcept {
-            float len = GetLength();
+        Vector3& apply_normalize() noexcept {
+            float len = get_length();
             if (len > 0.0f) { x /= len; y /= len; z /= len; }
             return *this;
         }
@@ -215,27 +215,27 @@ namespace Hooray {
         constexpr Vector4(float val) noexcept : x{val}, y{val}, z{val}, w{val} {}
         constexpr Vector4(float x_, float y_, float z_, float w_) noexcept : x{x_}, y{y_}, z{z_}, w{w_} {}
 
-        [[nodiscard]] static constexpr Vector4 Zero() noexcept { return {0.0f, 0.0f, 0.0f, 0.0f}; }
-        [[nodiscard]] static constexpr Vector4 One() noexcept { return {1.0f, 1.0f, 1.0f, 1.0f}; }
+        [[nodiscard]] static constexpr Vector4 zero() noexcept { return {0.0f, 0.0f, 0.0f, 0.0f}; }
+        [[nodiscard]] static constexpr Vector4 one() noexcept { return {1.0f, 1.0f, 1.0f, 1.0f}; }
 
-        [[nodiscard]] float GetLength() const noexcept { return std::sqrt(x * x + y * y + z * z + w * w); }
-        [[nodiscard]] constexpr float GetLengthSqr() const noexcept { return x * x + y * y + z * z + w * w; }
-        [[nodiscard]] float GetDistance(Vector4 other) const noexcept { return (*this - other).GetLength(); }
-        [[nodiscard]] constexpr float GetDistanceSqr(Vector4 other) const noexcept { return (*this - other).GetLengthSqr(); }
+        [[nodiscard]] float get_length() const noexcept { return std::sqrt(x * x + y * y + z * z + w * w); }
+        [[nodiscard]] constexpr float get_length_sqr() const noexcept { return x * x + y * y + z * z + w * w; }
+        [[nodiscard]] float get_distance(Vector4 other) const noexcept { return (*this - other).get_length(); }
+        [[nodiscard]] constexpr float get_distance_sqr(Vector4 other) const noexcept { return (*this - other).get_length_sqr(); }
 
-        [[nodiscard]] Vector4 GetNormalized() const noexcept {
-            float len = GetLength();
+        [[nodiscard]] Vector4 get_normalized() const noexcept {
+            float len = get_length();
             return (len > 0.0f) ? Vector4{x / len, y / len, z / len, w / len} : Vector4{0.0f, 0.0f, 0.0f, 0.0f};
         }
-        [[nodiscard]] constexpr Vector4 GetLerp(Vector4 target, float amount) const noexcept {
+        [[nodiscard]] constexpr Vector4 get_lerp(Vector4 target, float amount) const noexcept {
             return {x + amount * (target.x - x), y + amount * (target.y - y),
                     z + amount * (target.z - z), w + amount * (target.w - w)};
         }
 
-        [[nodiscard]] constexpr float GetDot(Vector4 other) const noexcept { return x * other.x + y * other.y + z * other.z + w * other.w; }
+        [[nodiscard]] constexpr float get_dot(Vector4 other) const noexcept { return x * other.x + y * other.y + z * other.z + w * other.w; }
 
-        Vector4& ApplyNormalize() noexcept {
-            float len = GetLength();
+        Vector4& apply_normalize() noexcept {
+            float len = get_length();
             if (len > 0.0f) { x /= len; y /= len; z /= len; w /= len; }
             return *this;
         }
@@ -284,23 +284,23 @@ namespace Hooray {
             return (&m0)[row * 4 + col];
         }
 
-        [[nodiscard]] static constexpr Matrix Identity() noexcept { return Matrix{}; }
-        [[nodiscard]] static Matrix Translate(float x, float y, float z) noexcept;
-        [[nodiscard]] static Matrix Translate(Vector3 v) noexcept;
-        [[nodiscard]] static Matrix Scale(float x, float y, float z) noexcept;
-        [[nodiscard]] static Matrix RotateX(float angleRad) noexcept;
-        [[nodiscard]] static Matrix RotateY(float angleRad) noexcept;
-        [[nodiscard]] static Matrix RotateZ(float angleRad) noexcept;
-        [[nodiscard]] static Matrix Rotate(Vector3 axis, float angleRad) noexcept;
-        [[nodiscard]] static Matrix Perspective(double fovY, double aspect, double nearPlane, double farPlane) noexcept;
-        [[nodiscard]] static Matrix Ortho(double left, double right, double bottom, double top, double nearPlane, double farPlane) noexcept;
+        [[nodiscard]] static constexpr Matrix identity() noexcept { return Matrix{}; }
+        [[nodiscard]] static Matrix translate(float x, float y, float z) noexcept;
+        [[nodiscard]] static Matrix translate(Vector3 v) noexcept;
+        [[nodiscard]] static Matrix scale(float x, float y, float z) noexcept;
+        [[nodiscard]] static Matrix rotate_x(float angleRad) noexcept;
+        [[nodiscard]] static Matrix rotate_y(float angleRad) noexcept;
+        [[nodiscard]] static Matrix rotate_z(float angleRad) noexcept;
+        [[nodiscard]] static Matrix rotate(Vector3 axis, float angleRad) noexcept;
+        [[nodiscard]] static Matrix perspective(double fovY, double aspect, double nearPlane, double farPlane) noexcept;
+        [[nodiscard]] static Matrix ortho(double left, double right, double bottom, double top, double nearPlane, double farPlane) noexcept;
 
-        [[nodiscard]] float GetDeterminant() const noexcept;
-        [[nodiscard]] Matrix GetTransposed() const noexcept;
-        [[nodiscard]] Matrix GetInverted() const noexcept;
+        [[nodiscard]] float get_determinant() const noexcept;
+        [[nodiscard]] Matrix get_transposed() const noexcept;
+        [[nodiscard]] Matrix get_inverted() const noexcept;
 
-        Matrix& ApplyTranspose() noexcept;
-        Matrix& ApplyInvert() noexcept;
+        Matrix& apply_transpose() noexcept;
+        Matrix& apply_invert() noexcept;
 
         Matrix operator+(Matrix rhs) const noexcept;
         Matrix operator-(Matrix rhs) const noexcept;
@@ -332,21 +332,21 @@ namespace Hooray {
         constexpr Rectangle(float x_, float y_, float width_, float height_) noexcept: x{x_}, y{y_}, width{width_}, height{height_} {}
         constexpr Rectangle(Vector2 position, Vector2 size) noexcept: x{position.x}, y{position.y}, width{size.x}, height{size.y} {}
 
-        [[nodiscard]] constexpr Vector2 GetPosition() const noexcept { return {x, y}; }
-        constexpr void SetPosition(Vector2 pos) noexcept { x = pos.x; y = pos.y; }
+        [[nodiscard]] constexpr Vector2 get_position() const noexcept { return {x, y}; }
+        constexpr void set_position(Vector2 pos) noexcept { x = pos.x; y = pos.y; }
 
-        [[nodiscard]] constexpr Vector2 GetSize() const noexcept { return {width, height}; }
-        constexpr void SetSize(Vector2 size) noexcept { width = size.x; height = size.y; }
+        [[nodiscard]] constexpr Vector2 get_size() const noexcept { return {width, height}; }
+        constexpr void set_size(Vector2 size) noexcept { width = size.x; height = size.y; }
 
-        [[nodiscard]] constexpr float Left() const noexcept { return x; }
-        [[nodiscard]] constexpr float Right() const noexcept { return x + width; }
-        [[nodiscard]] constexpr float Top() const noexcept { return y; }
-        [[nodiscard]] constexpr float Bottom() const noexcept { return y + height; }
-        [[nodiscard]] constexpr Vector2 Center() const noexcept { return {x + width * 0.5f, y + height * 0.5f}; }
+        [[nodiscard]] constexpr float left() const noexcept { return x; }
+        [[nodiscard]] constexpr float right() const noexcept { return x + width; }
+        [[nodiscard]] constexpr float top() const noexcept { return y; }
+        [[nodiscard]] constexpr float bottom() const noexcept { return y + height; }
+        [[nodiscard]] constexpr Vector2 center() const noexcept { return {x + width * 0.5f, y + height * 0.5f}; }
 
-        [[nodiscard]] bool Contains(Vector2 point) const noexcept;
-        [[nodiscard]] bool Overlaps(Rectangle other) const noexcept;
-        [[nodiscard]] Rectangle GetCollision(Rectangle other) const noexcept;
+        [[nodiscard]] bool contains(Vector2 point) const noexcept;
+        [[nodiscard]] bool overlaps(Rectangle other) const noexcept;
+        [[nodiscard]] Rectangle get_collision(Rectangle other) const noexcept;
 
         constexpr bool operator==(const Rectangle& rhs) const noexcept {
             return x == rhs.x && y == rhs.y && width == rhs.width && height == rhs.height;

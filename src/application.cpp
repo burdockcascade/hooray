@@ -103,7 +103,7 @@ namespace Hooray {
         }
     }
 
-    void Renderer::clearBackground(Color color) const {
+    void Renderer::clear_background(Color color) const {
         command_queue_.emplace_back(ClearBackgroundCmd{color});
     }
 
@@ -119,19 +119,19 @@ namespace Hooray {
         command_queue_.clear();
     }
 
-    void Layer2d::drawLine(const Vector2 start, const Vector2 end, const float thickness, const Color color) const {
+    void Layer2d::draw_line(const Vector2 start, const Vector2 end, const float thickness, const Color color) const {
         command_queue_.emplace_back(DrawLineCmd{.start = start, .end = end, .thickness = thickness, .color = color});
     }
 
-    void Layer2d::drawCircle(const Vector2 center, const float radius, const Color color) const {
+    void Layer2d::draw_circle(const Vector2 center, const float radius, const Color color) const {
         command_queue_.emplace_back(DrawCircleCmd{.center = center, .radius = radius, .color = color});
     }
 
-    void Layer2d::drawRectangle(const Rectangle rect, const Color color) const {
+    void Layer2d::draw_rectangle(const Rectangle rect, const Color color) const {
         command_queue_.emplace_back(DrawRectangleCmd{.rect = rect, .color = color});
     }
 
-    void Layer2d::drawText(std::string text, const Vector2 pos) const {
+    void Layer2d::draw_text(std::string text, const Vector2 pos) const {
         command_queue_.emplace_back(DrawTextCmd{
             .text = std::move(text),
             .position = pos,

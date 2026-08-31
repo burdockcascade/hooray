@@ -24,10 +24,10 @@ namespace {
         }
 
         void on_draw(Hooray::Renderer &render) override {
-            render.clearBackground(Hooray::Palette::CharBlack);
+            render.clear_background(Hooray::Palette::CharBlack);
 
-            render.withScreenSpace([this](Hooray::Layer2d layer) {
-                layer.drawText("Mouse Pos; X: " + std::to_string(mouse_position_.x) + " Y: " + std::to_string(mouse_position_.y), text_pos);
+            render.with_screen_space([this](Hooray::Layer2d layer) {
+                layer.draw_text("Mouse Pos; X: " + std::to_string(mouse_position_.x) + " Y: " + std::to_string(mouse_position_.y), text_pos);
             });
         }
 

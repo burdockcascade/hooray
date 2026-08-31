@@ -70,16 +70,16 @@ namespace Hooray {
         return vec * scalar;
     }
 
-    float Vector2::GetAngle(Vector2 other) const noexcept {
+    float Vector2::get_angle(Vector2 other) const noexcept {
         return ::Vector2Angle(ToRay(*this), ToRay(other));
     }
 
-    Vector2 Vector2::GetRotated(float angleRad) const noexcept {
+    Vector2 Vector2::get_rotated(float angleRad) const noexcept {
         return FromRay(::Vector2Rotate(ToRay(*this), angleRad));
     }
 
-    Vector2& Vector2::ApplyRotate(float angleRad) noexcept {
-        *this = GetRotated(angleRad);
+    Vector2& Vector2::apply_rotate(float angleRad) noexcept {
+        *this = get_rotated(angleRad);
         return *this;
     }
 
@@ -150,7 +150,7 @@ namespace Hooray {
         return vec * scalar;
     }
 
-    float Vector3::GetAngle(Vector3 other) const noexcept {
+    float Vector3::get_angle(Vector3 other) const noexcept {
         return ::Vector3Angle(ToRay(*this), ToRay(other));
     }
 
@@ -220,63 +220,63 @@ namespace Hooray {
 #pragma region Matrix
 
     // Static Transformation Methods
-    Matrix Matrix::Translate(float x, float y, float z) noexcept {
+    Matrix Matrix::translate(float x, float y, float z) noexcept {
         return FromRay(::MatrixTranslate(x, y, z));
     }
 
-    Matrix Matrix::Translate(Vector3 v) noexcept {
+    Matrix Matrix::translate(Vector3 v) noexcept {
         return FromRay(::MatrixTranslate(v.x, v.y, v.z));
     }
 
-    Matrix Matrix::Scale(float x, float y, float z) noexcept {
+    Matrix Matrix::scale(float x, float y, float z) noexcept {
         return FromRay(::MatrixScale(x, y, z));
     }
 
-    Matrix Matrix::RotateX(float angleRad) noexcept {
+    Matrix Matrix::rotate_x(float angleRad) noexcept {
         return FromRay(::MatrixRotateX(angleRad));
     }
 
-    Matrix Matrix::RotateY(float angleRad) noexcept {
+    Matrix Matrix::rotate_y(float angleRad) noexcept {
         return FromRay(::MatrixRotateY(angleRad));
     }
 
-    Matrix Matrix::RotateZ(float angleRad) noexcept {
+    Matrix Matrix::rotate_z(float angleRad) noexcept {
         return FromRay(::MatrixRotateZ(angleRad));
     }
 
-    Matrix Matrix::Rotate(Vector3 axis, float angleRad) noexcept {
+    Matrix Matrix::rotate(Vector3 axis, float angleRad) noexcept {
         return FromRay(::MatrixRotate(ToRay(axis), angleRad));
     }
 
-    Matrix Matrix::Perspective(double fovY, double aspect, double nearPlane, double farPlane) noexcept {
+    Matrix Matrix::perspective(double fovY, double aspect, double nearPlane, double farPlane) noexcept {
         return FromRay(::MatrixPerspective(fovY, aspect, nearPlane, farPlane));
     }
 
-    Matrix Matrix::Ortho(double left, double right, double bottom, double top, double nearPlane, double farPlane) noexcept {
+    Matrix Matrix::ortho(double left, double right, double bottom, double top, double nearPlane, double farPlane) noexcept {
         return FromRay(::MatrixOrtho(left, right, bottom, top, nearPlane, farPlane));
     }
 
     // Matrix Inspection & Inverse Methods
-    float Matrix::GetDeterminant() const noexcept {
+    float Matrix::get_determinant() const noexcept {
         return ::MatrixDeterminant(ToRay(*this));
     }
 
-    Matrix Matrix::GetTransposed() const noexcept {
+    Matrix Matrix::get_transposed() const noexcept {
         return FromRay(::MatrixTranspose(ToRay(*this)));
     }
 
-    Matrix Matrix::GetInverted() const noexcept {
+    Matrix Matrix::get_inverted() const noexcept {
         return FromRay(::MatrixInvert(ToRay(*this)));
     }
 
     // In-place Modifier Methods
-    Matrix& Matrix::ApplyTranspose() noexcept {
-        *this = GetTransposed();
+    Matrix& Matrix::apply_transpose() noexcept {
+        *this = get_transposed();
         return *this;
     }
 
-    Matrix& Matrix::ApplyInvert() noexcept {
-        *this = GetInverted();
+    Matrix& Matrix::apply_invert() noexcept {
+        *this = get_inverted();
         return *this;
     }
 
@@ -319,15 +319,15 @@ namespace Hooray {
 #pragma region Rectangle
 
     // --- Geometry ---
-    bool Rectangle::Contains(Vector2 point) const noexcept {
+    bool Rectangle::contains(Vector2 point) const noexcept {
         return CheckCollisionPointRec(ToRay(point), ToRay(*this));
     }
 
-    bool Rectangle::Overlaps(Rectangle other) const noexcept {
+    bool Rectangle::overlaps(Rectangle other) const noexcept {
         return CheckCollisionRecs(ToRay(*this), ToRay(other));
     }
 
-    Rectangle Rectangle::GetCollision(Rectangle other) const noexcept {
+    Rectangle Rectangle::get_collision(Rectangle other) const noexcept {
         return FromRay(GetCollisionRec(ToRay(*this), ToRay(other)));
     }
 
@@ -351,78 +351,78 @@ namespace Hooray {
 
 #pragma region Color Methods
 
-    Vector4 Color::ToVector4() const noexcept {
+    Vector4 Color::to_vector4() const noexcept {
         return FromRay(::ColorNormalize(ToRay(*this)));
     }
 
-    std::uint32_t Color::ToInt() const noexcept {
+    std::uint32_t Color::to_int() const noexcept {
         return ::ColorToInt(ToRay(*this));
     }
 
-    Color Color::FromNormalized(Vector4 normalized) noexcept {
+    Color Color::from_normalized(Vector4 normalized) noexcept {
         return FromRay(::ColorFromNormalized(ToRay(normalized)));
     }
 
-    Color Color::FromHSV(float hue, float saturation, float value) noexcept {
+    Color Color::from_hsv(float hue, float saturation, float value) noexcept {
         return FromRay(::ColorFromHSV(hue, saturation, value));
     }
 
-    Vector3 Color::ToHSV() const noexcept {
+    Vector3 Color::to_hsv() const noexcept {
         return FromRay(::ColorToHSV(ToRay(*this)));
     }
 
-    Color Color::GetFade(float alpha) const noexcept {
+    Color Color::get_fade(float alpha) const noexcept {
         return FromRay(::Fade(ToRay(*this), alpha));
     }
 
-    Color Color::GetAlpha(float alpha) const noexcept {
+    Color Color::get_alpha(float alpha) const noexcept {
         Color result = *this;
         result.a = static_cast<unsigned char>(std::clamp(alpha, 0.0f, 1.0f) * 255.0f);
         return result;
     }
 
-    Color Color::GetAlphaBlend(Color src, Color tint) const noexcept {
+    Color Color::get_alpha_blend(Color src, Color tint) const noexcept {
         return FromRay(::ColorAlphaBlend(ToRay(*this), ToRay(src), ToRay(tint)));
     }
 
-    Color Color::GetLerp(Color target, float factor) const noexcept {
+    Color Color::get_lerp(Color target, float factor) const noexcept {
         return FromRay(::ColorLerp(ToRay(*this), ToRay(target), factor));
     }
 
-    Color Color::GetTint(Color tint) const noexcept {
+    Color Color::get_tint(Color tint) const noexcept {
         return FromRay(::ColorTint(ToRay(*this), ToRay(tint)));
     }
 
-    Color Color::GetContrast(float contrast) const noexcept {
+    Color Color::get_contrast(float contrast) const noexcept {
         return FromRay(::ColorContrast(ToRay(*this), contrast));
     }
 
-    Color Color::GetBrightness(float factor) const noexcept {
+    Color Color::get_brightness(float factor) const noexcept {
         return FromRay(::ColorBrightness(ToRay(*this), factor));
     }
 
-    Color& Color::ApplyFade(float alpha) noexcept {
-        *this = GetFade(alpha);
+    Color& Color::apply_fade(float alpha) noexcept {
+        *this = get_fade(alpha);
         return *this;
     }
 
-    Color& Color::ApplyAlpha(float alpha) noexcept {
-        *this = GetAlpha(alpha);
+    Color& Color::apply_alpha(float alpha) noexcept {
+        *this = get_alpha(alpha);
         return *this;
     }
 
-    Color& Color::ApplyTint(Color tint) noexcept {
-        *this = GetTint(tint);
+    Color& Color::apply_tint(Color tint) noexcept {
+        *this = get_tint(tint);
         return *this;
     }
 
-    Color& Color::ApplyContrast(float contrast) noexcept {
-        *this = GetContrast(contrast);
+    Color& Color::apply_contrast(float contrast) noexcept {
+        *this = get_contrast(contrast);
         return *this;
     }
 
-    Color& Color::ApplyBrightness(float factor) noexcept {
-        *this = GetBrightness(factor);
+    Color& Color::apply_brightness(float factor) noexcept {
+        *this = get_brightness(factor);
         return *this;
     }
 

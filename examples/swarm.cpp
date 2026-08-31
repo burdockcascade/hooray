@@ -107,7 +107,7 @@ namespace {
         }
 
         void on_draw(Hooray::Renderer& render) override {
-            render.clearBackground(Hooray::Palette::CharBlack);
+            render.clear_background(Hooray::Palette::CharBlack);
 
             // Standard screen-space rendering context via Layer2d
             constexpr Hooray::Camera2D default_camera{
@@ -117,19 +117,19 @@ namespace {
                 .zoom = 1.0f
             };
 
-            render.withLayer2d(default_camera, [this](Hooray::Layer2d layer) {
+            render.with_layer_2d(default_camera, [this](Hooray::Layer2d layer) {
 
                 // 1. Draw animated expanding geometric rings
                 for (const auto& r : rings) {
                     const float alpha = 1.0f - (r.radius / r.maxRadius);
-                    Hooray::Color ringColor = Hooray::Palette::Purple.GetAlpha(alpha * 0.4f);
-                    layer.drawCircle(Hooray::Vector2(centerX, centerY), r.radius, ringColor);
+                    Hooray::Color ringColor = Hooray::Palette::Purple.get_alpha(alpha * 0.4f);
+                    layer.draw_circle(Hooray::Vector2(centerX, centerY), r.radius, ringColor);
                 }
 
                 // 2. Draw rotating center diamond structure
                 const float diamondSize = 35.0f + std::sin(time_ * 3.0f) * 10.0f;
                 const float lerpFactorCore = (std::sin(time_ * 2.0f) + 1.0f) / 2.0f;
-                const Hooray::Color coreColor = Hooray::Palette::Cyan.GetLerp(Hooray::Palette::Magenta, lerpFactorCore);
+                const Hooray::Color coreColor = Hooray::Palette::Cyan.get_lerp(Hooray::Palette::Magenta, lerpFactorCore);
 
                 Hooray::Rectangle diamondRect(
                     centerX - diamondSize / 2.0f,
@@ -137,7 +137,7 @@ namespace {
                     diamondSize,
                     diamondSize
                 );
-                layer.drawRectangle(diamondRect, coreColor);
+                layer.draw_rectangle(diamondRect, coreColor);
 
                 // 3. Draw orbiting particle cloud
                 for (const auto& p : particles) {
@@ -146,14 +146,14 @@ namespace {
                         particleColor = Hooray::Palette::Copper;
                     } else {
                         float lerpFactor = (std::sin(time_ + p.angle) + 1.0f) / 2.0f;
-                        particleColor = p.baseColor.GetLerp(Hooray::Palette::Yellow, lerpFactor);
+                        particleColor = p.baseColor.get_lerp(Hooray::Palette::Yellow, lerpFactor);
                     }
 
                     // Main particle shape
-                    layer.drawCircle(Hooray::Vector2(p.x, p.y), p.size, particleColor);
+                    layer.draw_circle(Hooray::Vector2(p.x, p.y), p.size, particleColor);
 
                     // Outer ambient glow circle
-                    layer.drawCircle(Hooray::Vector2(p.x, p.y), p.size * 2.0f, particleColor.GetAlpha(0.25f));
+                    layer.draw_circle(Hooray::Vector2(p.x, p.y), p.size * 2.0f, particleColor.get_alpha(0.25f));
                 }
 
                 // 4. Draw vibrant connecting line pulses
@@ -169,11 +169,11 @@ namespace {
                         const auto& p1 = particles[idx1];
                         const auto& p2 = particles[idx2];
 
-                        layer.drawLine(
+                        layer.draw_line(
                             Hooray::Vector2(p1.x, p1.y),
                             Hooray::Vector2(p2.x, p2.y),
                             1.0f, // Line thickness parameter required by C++ Layer2d API
-                            Hooray::Palette::Lime.GetAlpha(0.2f)
+                            Hooray::Palette::Lime.get_alpha(0.2f)
                         );
                     }
                 }
