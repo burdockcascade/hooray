@@ -8,68 +8,6 @@
 #include <vector>
 
 namespace Hooray {
-    // Forward declarations
-    class Vector3;
-    class Vector4;
-
-#pragma region Color
-
-    class Color {
-    public:
-        unsigned char r{0};
-        unsigned char g{0};
-        unsigned char b{0};
-        unsigned char a{255};
-
-        // Constructors
-        constexpr Color() noexcept = default;
-        constexpr Color(int r_, int g_, int b_, int a_ = 255) noexcept {
-            r = static_cast<unsigned char>(std::clamp(r_, 0, 255));
-            g = static_cast<unsigned char>(std::clamp(g_, 0, 255));
-            b = static_cast<unsigned char>(std::clamp(b_, 0, 255));
-            a = static_cast<unsigned char>(std::clamp(a_, 0, 255));
-        }
-
-        constexpr Color(unsigned char r_, unsigned char g_, unsigned char b_, unsigned char a_ = 255) noexcept {
-            r = r_;
-            g = g_;
-            b = b_;
-            a = a_;
-        }
-
-        explicit constexpr Color(std::uint32_t hexValue) noexcept
-            : r{static_cast<unsigned char>((hexValue >> 24) & 0xFF)},
-              g{static_cast<unsigned char>((hexValue >> 16) & 0xFF)},
-              b{static_cast<unsigned char>((hexValue >> 8) & 0xFF)},
-              a{static_cast<unsigned char>(hexValue & 0xFF)} {}
-
-        // Declarations requiring Raylib implementation in CPP
-        [[nodiscard]] Vector4 to_vector4() const noexcept;
-        [[nodiscard]] std::uint32_t to_int() const noexcept;
-        [[nodiscard]] static Color from_normalized(Vector4 normalized) noexcept;
-        [[nodiscard]] static Color from_hsv(float hue, float saturation, float value) noexcept;
-        [[nodiscard]] Vector3 to_hsv() const noexcept;
-
-        [[nodiscard]] Color get_fade(float alpha) const noexcept;
-        [[nodiscard]] Color get_alpha(float alpha) const noexcept;
-        [[nodiscard]] Color get_alpha_blend(Color src, Color tint) const noexcept;
-        [[nodiscard]] Color get_lerp(Color target, float factor) const noexcept;
-        [[nodiscard]] Color get_tint(Color tint) const noexcept;
-        [[nodiscard]] Color get_contrast(float contrast) const noexcept;
-        [[nodiscard]] Color get_brightness(float factor) const noexcept;
-
-        Color& apply_fade(float alpha) noexcept;
-        Color& apply_alpha(float alpha) noexcept;
-        Color& apply_tint(Color tint) noexcept;
-        Color& apply_contrast(float contrast) noexcept;
-        Color& apply_brightness(float factor) noexcept;
-
-        constexpr bool operator==(const Color& rhs) const noexcept {
-            return r == rhs.r && g == rhs.g && b == rhs.b && a == rhs.a;
-        }
-    };
-
-#pragma endregion
 
 #pragma region Math
 
@@ -319,86 +257,114 @@ namespace Hooray {
 
 #pragma endregion
 
-#pragma region Geometry
+#pragma region Window
 
-    class Rectangle {
-    public:
-        float x{0.0f};
-        float y{0.0f};
-        float width{0.0f};
-        float height{0.0f};
+    struct Window {
+        Window(int width, int height, const std::string& title);
+        ~Window();
 
-        constexpr Rectangle() noexcept = default;
-        constexpr Rectangle(float x_, float y_, float width_, float height_) noexcept: x{x_}, y{y_}, width{width_}, height{height_} {}
-        constexpr Rectangle(Vector2 position, Vector2 size) noexcept: x{position.x}, y{position.y}, width{size.x}, height{size.y} {}
+        // Lifecycle & State
+        [[nodiscard]] bool ShouldClose() const;
+        [[nodiscard]] bool IsReady() const;
+        [[nodiscard]] bool IsFullscreen() const;
+        [[nodiscard]] bool IsHidden() const;
+        [[nodiscard]] bool IsMinimized() const;
+        [[nodiscard]] bool IsMaximized() const;
+        [[nodiscard]] bool IsFocused() const;
+        [[nodiscard]] bool IsResized() const;
 
-        [[nodiscard]] constexpr Vector2 get_position() const noexcept { return {x, y}; }
-        constexpr void set_position(Vector2 pos) noexcept { x = pos.x; y = pos.y; }
+        // Window Manipulation
+        void SetTitle(const std::string& title);
+        void SetPosition(int x, int y);
+        void SetSize(int width, int height);
+        void SetMinSize(int width, int height);
+        void SetTargetFPS(int fps);
+        void ToggleFullscreen();
+        void Maximize();
+        void Minimize();
+        void Restore();
 
-        [[nodiscard]] constexpr Vector2 get_size() const noexcept { return {width, height}; }
-        constexpr void set_size(Vector2 size) noexcept { width = size.x; height = size.y; }
+        // Drawing & Frame Control
+        void ClearBackground(unsigned char r, unsigned char g, unsigned char b, unsigned char a = 255);
+        void BeginDrawing();
+        void EndDrawing();
 
-        [[nodiscard]] constexpr float left() const noexcept { return x; }
-        [[nodiscard]] constexpr float right() const noexcept { return x + width; }
-        [[nodiscard]] constexpr float top() const noexcept { return y; }
-        [[nodiscard]] constexpr float bottom() const noexcept { return y + height; }
-        [[nodiscard]] constexpr Vector2 center() const noexcept { return {x + width * 0.5f, y + height * 0.5f}; }
+        // Metrics
+        [[nodiscard]] int GetWidth() const;
+        [[nodiscard]] int GetHeight() const;
+        [[nodiscard]] int GetRenderWidth() const;
+        [[nodiscard]] int GetRenderHeight() const;
+        [[nodiscard]] float GetFrameTime() const;
+        [[nodiscard]] double GetTime() const;
+        [[nodiscard]] int GetFPS() const;
 
-        [[nodiscard]] bool contains(Vector2 point) const noexcept;
-        [[nodiscard]] bool overlaps(Rectangle other) const noexcept;
-        [[nodiscard]] Rectangle get_collision(Rectangle other) const noexcept;
-
-        constexpr bool operator==(const Rectangle& rhs) const noexcept {
-            return x == rhs.x && y == rhs.y && width == rhs.width && height == rhs.height;
-        }
-
-    };
-
-    struct Circle {
-        Vector2 center;
-        float radius;
-
-        constexpr Circle() noexcept = default;
-        constexpr Circle(Vector2 center_, float radius_) noexcept : center{center_}, radius{radius_} {}
-        constexpr Circle(float x, float y, float radius_) noexcept : center{x, y}, radius{radius_} {}
-
-        [[nodiscard]] bool contains(Vector2 other) const;
-        [[nodiscard]] bool overlaps(Circle other) const;
-        [[nodiscard]] bool overlaps(Rectangle other) const;
-    };
-
-    struct JSTriangle {
-        Vector2 v1;
-        Vector2 v2;
-        Vector2 v3;
-    };
-
-    struct JSPoint {
-        Vector2 position;
-    };
-
-    struct JSLine {
-        Vector2 start;
-        Vector2 end;
-    };
-
-    struct JSPolygon {
-        std::vector<Vector2> points;
+        // Cursor
+        void ShowCursor();
+        void HideCursor();
+        [[nodiscard]] bool IsCursorHidden() const;
+        void EnableCursor();
+        void DisableCursor();
+        [[nodiscard]] bool IsCursorOnScreen() const;
     };
 
 #pragma endregion
 
-    struct Camera2D {
-        Vector2 offset;
-        Vector2 target;
-        float rotation;
-        float zoom;
-    };
+#pragma region Color
 
-    struct TextureHandle { void* id{ nullptr }; };
-    struct FontHandle    { void* id{ nullptr }; };
-    struct SoundHandle   { void* id{ nullptr }; };
-    struct MusicHandle   { void* id{ nullptr }; };
+    class Color {
+    public:
+        unsigned char r{0};
+        unsigned char g{0};
+        unsigned char b{0};
+        unsigned char a{255};
+
+        // Constructors
+        constexpr Color() noexcept = default;
+        constexpr Color(int r_, int g_, int b_, int a_ = 255) noexcept {
+            r = static_cast<unsigned char>(std::clamp(r_, 0, 255));
+            g = static_cast<unsigned char>(std::clamp(g_, 0, 255));
+            b = static_cast<unsigned char>(std::clamp(b_, 0, 255));
+            a = static_cast<unsigned char>(std::clamp(a_, 0, 255));
+        }
+
+        constexpr Color(unsigned char r_, unsigned char g_, unsigned char b_, unsigned char a_ = 255) noexcept {
+            r = r_;
+            g = g_;
+            b = b_;
+            a = a_;
+        }
+
+        explicit constexpr Color(std::uint32_t hexValue) noexcept
+            : r{static_cast<unsigned char>((hexValue >> 24) & 0xFF)},
+              g{static_cast<unsigned char>((hexValue >> 16) & 0xFF)},
+              b{static_cast<unsigned char>((hexValue >> 8) & 0xFF)},
+              a{static_cast<unsigned char>(hexValue & 0xFF)} {}
+
+        // Declarations requiring Raylib implementation in CPP
+        [[nodiscard]] Vector4 to_vector4() const noexcept;
+        [[nodiscard]] std::uint32_t to_int() const noexcept;
+        [[nodiscard]] static Color from_normalized(Vector4 normalized) noexcept;
+        [[nodiscard]] static Color from_hsv(float hue, float saturation, float value) noexcept;
+        [[nodiscard]] Vector3 to_hsv() const noexcept;
+
+        [[nodiscard]] Color get_fade(float alpha) const noexcept;
+        [[nodiscard]] Color get_alpha(float alpha) const noexcept;
+        [[nodiscard]] Color get_alpha_blend(Color src, Color tint) const noexcept;
+        [[nodiscard]] Color get_lerp(Color target, float factor) const noexcept;
+        [[nodiscard]] Color get_tint(Color tint) const noexcept;
+        [[nodiscard]] Color get_contrast(float contrast) const noexcept;
+        [[nodiscard]] Color get_brightness(float factor) const noexcept;
+
+        Color& apply_fade(float alpha) noexcept;
+        Color& apply_alpha(float alpha) noexcept;
+        Color& apply_tint(Color tint) noexcept;
+        Color& apply_contrast(float contrast) noexcept;
+        Color& apply_brightness(float factor) noexcept;
+
+        constexpr bool operator==(const Color& rhs) const noexcept {
+            return r == rhs.r && g == rhs.g && b == rhs.b && a == rhs.a;
+        }
+    };
 
     namespace Palette {
         // Grays & Neutrals
@@ -501,5 +467,88 @@ namespace Hooray {
         constexpr Color Coffee{111, 78, 55, 255};
         constexpr Color Chocolate{210, 105, 30, 255};
     }
+
+#pragma endregion
+
+#pragma region Geometry
+
+    class Rectangle {
+    public:
+        float x{0.0f};
+        float y{0.0f};
+        float width{0.0f};
+        float height{0.0f};
+
+        constexpr Rectangle() noexcept = default;
+        constexpr Rectangle(float x_, float y_, float width_, float height_) noexcept: x{x_}, y{y_}, width{width_}, height{height_} {}
+        constexpr Rectangle(Vector2 position, Vector2 size) noexcept: x{position.x}, y{position.y}, width{size.x}, height{size.y} {}
+
+        [[nodiscard]] constexpr Vector2 get_position() const noexcept { return {x, y}; }
+        constexpr void set_position(Vector2 pos) noexcept { x = pos.x; y = pos.y; }
+
+        [[nodiscard]] constexpr Vector2 get_size() const noexcept { return {width, height}; }
+        constexpr void set_size(Vector2 size) noexcept { width = size.x; height = size.y; }
+
+        [[nodiscard]] constexpr float left() const noexcept { return x; }
+        [[nodiscard]] constexpr float right() const noexcept { return x + width; }
+        [[nodiscard]] constexpr float top() const noexcept { return y; }
+        [[nodiscard]] constexpr float bottom() const noexcept { return y + height; }
+        [[nodiscard]] constexpr Vector2 center() const noexcept { return {x + width * 0.5f, y + height * 0.5f}; }
+
+        [[nodiscard]] bool contains(Vector2 point) const noexcept;
+        [[nodiscard]] bool overlaps(Rectangle other) const noexcept;
+        [[nodiscard]] Rectangle get_collision(Rectangle other) const noexcept;
+
+        constexpr bool operator==(const Rectangle& rhs) const noexcept {
+            return x == rhs.x && y == rhs.y && width == rhs.width && height == rhs.height;
+        }
+
+    };
+
+    struct Circle {
+        Vector2 center;
+        float radius;
+
+        constexpr Circle() noexcept = default;
+        constexpr Circle(Vector2 center_, float radius_) noexcept : center{center_}, radius{radius_} {}
+        constexpr Circle(float x, float y, float radius_) noexcept : center{x, y}, radius{radius_} {}
+
+        [[nodiscard]] bool contains(Vector2 other) const;
+        [[nodiscard]] bool overlaps(Circle other) const;
+        [[nodiscard]] bool overlaps(Rectangle other) const;
+    };
+
+    struct JSTriangle {
+        Vector2 v1;
+        Vector2 v2;
+        Vector2 v3;
+    };
+
+    struct JSPoint {
+        Vector2 position;
+    };
+
+    struct JSLine {
+        Vector2 start;
+        Vector2 end;
+    };
+
+    struct JSPolygon {
+        std::vector<Vector2> points;
+    };
+
+#pragma endregion
+
+    struct Camera2D {
+        Vector2 offset;
+        Vector2 target;
+        float rotation;
+        float zoom;
+    };
+
+    struct TextureHandle { void* id{ nullptr }; };
+    struct FontHandle    { void* id{ nullptr }; };
+    struct SoundHandle   { void* id{ nullptr }; };
+    struct MusicHandle   { void* id{ nullptr }; };
 
 }
