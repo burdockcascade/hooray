@@ -1,10 +1,13 @@
 #pragma once
 
-#include <vector>
 #include <variant>
-#include <type_traits>
 #include <string>
-#include <hr_types.hpp>
+
+#include <hooray/handles.hpp>
+#include <hooray/math.hpp>
+#include <hooray/geometry.hpp>
+#include <hooray/color.hpp>
+#include <hooray/camera.hpp>
 
 namespace Hooray {
 

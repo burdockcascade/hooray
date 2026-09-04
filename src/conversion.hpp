@@ -1,5 +1,9 @@
 #pragma once
-#include "../include/hr_types.hpp"
+
+#include <hooray/handles.hpp>
+#include <hooray/math.hpp>
+#include <hooray/geometry.hpp>
+#include <hooray/color.hpp>
 
 struct Color;
 struct Vector2;

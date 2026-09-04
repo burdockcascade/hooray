@@ -2,6 +2,8 @@
 #include <raylib.h>
 #include "conversion.hpp"
 
+#include "hooray/camera.hpp"
+
 namespace Hooray {
 
     ::Color ToRay(Color c) noexcept {

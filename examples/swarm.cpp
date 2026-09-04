@@ -1,9 +1,7 @@
 #include <cmath>
-#include <cstdlib>
 #include <vector>
 #include <algorithm>
 #include <random>
-#include <ranges>
 #include <numbers>
 
 #include "hooray.hpp"

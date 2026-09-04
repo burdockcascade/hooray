@@ -1,4 +1,4 @@
-#include "hooray.hpp"
+#include "hooray/window.hpp"
 
 int main() {
 

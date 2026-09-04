@@ -1,10 +1,11 @@
 #include <variant>
 #include <raylib.h>
-#include "application.hpp"
+#include <hooray/application.hpp>
+#include <hooray/commands.hpp>
 
 #include <functional>
 
-#include "commands.hpp"
+
 #include "conversion.hpp"
 
 namespace Hooray {
