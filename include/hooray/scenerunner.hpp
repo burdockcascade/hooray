@@ -15,6 +15,11 @@ namespace Hooray {
         DeclarativeApp& operator=(const DeclarativeApp&) = delete;
 
         int run();
+
+        void DrawElement(const VisualElement2D &elem);
+
+        void OnDraw();
+
         void quit();
 
     private:

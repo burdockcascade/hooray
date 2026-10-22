@@ -14,6 +14,11 @@ namespace Hooray {
         uint8_t a{255};
     };
 
+    struct Vector2 {
+        float x{0.0f};
+        float y{0.0f};
+    };
+
 #pragma endregion
 
 #pragma region Color
@@ -132,6 +137,60 @@ namespace Hooray {
 
 #pragma endregion
 
+#pragma region Node2D
+
+    struct RectangleShape {
+        Vector2 position{.x = 0.0f, .y = 0.0f};
+        Vector2 size{.x = 100.0f, .y = 100.0f};
+        Color fillColor{Colors::White};
+        bool visible{true};
+    };
+
+    struct CircleShape {
+        Vector2 position{.x = 0.0f, .y = 0.0f};
+        float radius{50.0f};
+        Color fillColor{Colors::White};
+        bool visible{true};
+    };
+
+    struct TriangleShape {
+        Vector2 position{.x = 0.0f, .y = 0.0f};
+        float size{50.0f};
+        Color fillColor{Colors::White};
+        bool visible{true};
+    };
+
+    using VisualElement2D = std::variant<RectangleShape, CircleShape, TriangleShape>;
+
+#pragma endregion
+
+#pragma region Scene
+
+    struct Camera2D {
+        Vector2 target{.x = 0.0f, .y = 0.0f};
+        Vector2 offset{.x = 0.0f, .y = 0.0f};
+        float rotation{0.0f};
+        float zoom{1.0f};
+    };
+
+    struct Layer2D {
+        Camera2D camera{};
+        std::vector<VisualElement2D> elements{};
+        bool visible{true};
+    };
+
+    using Layer = std::variant<Layer2D>;
+
+    struct Scene {
+        bool active{true};
+        bool visible{true};
+        std::vector<Layer> layers{};
+    };
+
+#pragma endregion
+
+#pragma region Window
+
     struct WindowConfig {
         std::string title = "Hooray App";
         int width = 1280;
@@ -144,6 +203,9 @@ namespace Hooray {
 
     struct AppConfig {
         WindowConfig window{};
+        std::vector<Scene> scenes{};
     };
+
+#pragma endregion
 
 }
