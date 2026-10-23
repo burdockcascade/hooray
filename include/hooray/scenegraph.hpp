@@ -246,11 +246,17 @@ namespace Hooray {
 #pragma endregion
 
 #pragma region Node2D
+    struct Transform2D {
+        Vector2 position{.x = 0.0f, .y = 0.0f};
+        float rotation{0.0f}; // in degrees
+        Vector2 scale{.x = 1.0f, .y = 1.0f};
+        Vector2 origin{.x = 0.0f, .y = 0.0f};
+    };
 
     struct RectangleShape {
         bool active{true};
         bool visible{true};
-        Vector2 position{.x = 0.0f, .y = 0.0f};
+        Transform2D transform{};
         Vector2 size{.x = 100.0f, .y = 100.0f};
         Color fillColor{Colors::White};
         ControllerSlot<RectangleShape> controller{};
@@ -259,7 +265,7 @@ namespace Hooray {
     struct CircleShape {
         bool active{true};
         bool visible{true};
-        Vector2 position{.x = 0.0f, .y = 0.0f};
+        Transform2D transform{};
         float radius{50.0f};
         Color fillColor{Colors::White};
         ControllerSlot<CircleShape> controller{};
@@ -268,7 +274,7 @@ namespace Hooray {
     struct TriangleShape {
         bool active{true};
         bool visible{true};
-        Vector2 position{.x = 0.0f, .y = 0.0f};
+        Transform2D transform{};
         float size{50.0f};
         Color fillColor{Colors::White};
         ControllerSlot<TriangleShape> controller{};

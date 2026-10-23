@@ -438,24 +438,23 @@ namespace Hooray {
     }
 
     static void DrawRectElement(const RectangleShape &elem) {
-        ::DrawRectangleRec(
-            ::Rectangle{elem.position.x, elem.position.y, elem.size.x, elem.size.y},
-            ToRaylibColor(elem.fillColor)
-        );
+        const auto rect = ::Rectangle{.x = elem.transform.position.x, .y = elem.transform.position.y, .width = elem.size.x, .height = elem.size.y};
+        const auto origin = ::Vector2{.x = elem.transform.origin.x, .y = elem.transform.origin.y};
+        ::DrawRectanglePro(rect, {rect.width/2,rect.height/2}, elem.transform.rotation, ToRaylibColor(elem.fillColor));
     }
 
     static void DrawCircleElement(const CircleShape &elem) {
         ::DrawCircleV(
-            ::Vector2{.x = elem.position.x, .y = elem.position.y},
+            ::Vector2{.x = elem.transform.position.x, .y = elem.transform.position.y},
             elem.radius,
             ToRaylibColor(elem.fillColor)
         );
     }
 
     static void DrawTriangleShape(const TriangleShape &elem) {
-        const ::Vector2 v1 = {elem.position.x, elem.position.y};
-        const ::Vector2 v2 = {elem.position.x - elem.size / 2.0f, elem.position.y + elem.size};
-        const ::Vector2 v3 = {elem.position.x + elem.size / 2.0f, elem.position.y + elem.size};
+        const ::Vector2 v1 = {.x = elem.transform.position.x, .y = elem.transform.position.y};
+        const ::Vector2 v2 = {.x = elem.transform.position.x - elem.size / 2.0f, .y = elem.transform.position.y + elem.size};
+        const ::Vector2 v3 = {.x = elem.transform.position.x + elem.size / 2.0f, .y = elem.transform.position.y + elem.size};
 
         ::DrawTriangle(v1, v2, v3, ToRaylibColor(elem.fillColor));
     }
