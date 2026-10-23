@@ -59,7 +59,7 @@ namespace Hooray {
 
     static void DrawRectElement(const RectangleShape &elem) {
         ::DrawRectangleRec(
-            ::Rectangle{elem.position.x, elem.position.y, elem.position.x + elem.size.x, elem.position.y + elem.size.y},
+            ::Rectangle{elem.position.x, elem.position.y, elem.size.x, elem.size.y},
             toRaylibColor(elem.fillColor)
         );
     }
