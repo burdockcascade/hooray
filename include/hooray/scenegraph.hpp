@@ -8,6 +8,81 @@ namespace Hooray {
 
 #pragma region NodeController
 
+    enum class KeyAction {
+        Pressed,   // Triggered once when first pressed
+        Down,      // Triggered every frame while held down
+        Released   // Triggered once when released
+    };
+
+    enum class Key {
+        Unknown = 0,
+
+        // Printable / ASCII matching
+        Space = 32,
+        Apostrophe = 39,    // '''
+        Comma = 44,         // ','
+        Minus = 45,         // '-'
+        Period = 46,        // '.'
+        Slash = 47,         // '/'
+        Zero = 48, One, Two, Three, Four, Five, Six, Seven, Eight, Nine,
+        Semicolon = 59,     // ';'
+        Equal = 61,         // '='
+        A = 65, B, C, D, E, F, G, H, I, J, K, L, M,
+        N, O, P, Q, R, S, T, U, V, W, X, Y, Z,
+        LeftBracket = 91,   // '['
+        Backslash = 92,     // '\'
+        RightBracket = 93,  // ']'
+        Grave = 96,         // '`'
+
+        // Function keys (Raylib / GLFW values starting at 256)
+        Escape = 256,
+        Enter,
+        Tab,
+        Backspace,
+        Insert,
+        Delete,
+        Right,
+        Left,
+        Down,
+        Up,
+        PageUp,
+        PageDown,
+        Home,
+        End,
+        CapsLock = 280,
+        ScrollLock,
+        NumLock,
+        PrintScreen,
+        Pause,
+        F1 = 290, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12,
+
+        // Keypad keys
+        Kp0 = 320, Kp1, Kp2, Kp3, Kp4, Kp5, Kp6, Kp7, Kp8, Kp9,
+        KpDecimal,
+        KpDivide,
+        KpMultiply,
+        KpSubtract,
+        KpAdd,
+        KpEnter,
+        KpEqual,
+
+        // Modifiers & System
+        LeftShift = 340,
+        LeftControl,
+        LeftAlt,
+        LeftSuper,
+        RightShift,
+        RightControl,
+        RightAlt,
+        RightSuper,
+        Menu
+    };
+
+    struct KeyEvent {
+        Key key{Key::Unknown};
+        KeyAction action{KeyAction::Pressed};
+    };
+
     template <typename T>
     struct NodeController {
         virtual ~NodeController() = default;
@@ -17,6 +92,8 @@ namespace Hooray {
         virtual void OnUpdate(float dt, T& node) {};
         virtual void OnDestroy(float dt, T& node) { };
 
+        virtual void OnKeyEvent(const KeyEvent& event, T& node) {}
+
     };
 
     template <typename T>
@@ -24,6 +101,7 @@ namespace Hooray {
         std::function<void(T& node)> onInit{nullptr};
         std::function<void(float dt, T& node)> onUpdate{nullptr};
         std::function<void(T& node)> onDestroy{nullptr};
+        std::function<void(const KeyEvent& event, T& node)> onKeyEvent{nullptr};
     };
 
     template <typename T>
@@ -193,6 +271,7 @@ namespace Hooray {
         Vector2 position{.x = 0.0f, .y = 0.0f};
         float size{50.0f};
         Color fillColor{Colors::White};
+        ControllerSlot<TriangleShape> controller{};
     };
 
     using VisualElement2D = std::variant<RectangleShape, CircleShape, TriangleShape>;
@@ -208,6 +287,7 @@ namespace Hooray {
         Vector2 offset{.x = 0.0f, .y = 0.0f};
         float rotation{0.0f};
         float zoom{1.0f};
+        ControllerSlot<Camera2D> controller{};
     };
 
     struct LayerUI {

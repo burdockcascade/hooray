@@ -1,16 +1,6 @@
 #include <hooray.hpp>
 #include <memory>
 
-namespace {
-    struct RectController : Hooray::NodeController<Hooray::RectangleShape> {
-
-        void OnUpdate(float dt, Hooray::RectangleShape &rect) override {
-            // do something
-        }
-
-    };
-}
-
 int main() {
     return Hooray::RunApp({
         .window = {
@@ -33,16 +23,17 @@ int main() {
                             Hooray::RectangleShape {
                                 .position = {.x = 10.0f, .y = 10.0f},
                                 .size = {.x = 200.0f, .y = 150.0f},
-                                .fillColor = Hooray::Colors::Red,
-                                .controller = std::make_shared<RectController>()
+                                .fillColor = Hooray::Colors::Red
                             },
                             Hooray::CircleShape {
                                 .position = {.x = 40.0f, .y = 30.0f},
                                 .radius = 75.0f,
                                 .fillColor = Hooray::Colors::Green,
                                 .controller = Hooray::NodeCallbacks<Hooray::CircleShape>{
-                                    .onUpdate = [](float dt, Hooray::CircleShape &circle) {
-                                        // do something
+                                    .onKeyEvent = [](const Hooray::KeyEvent& event, Hooray::CircleShape& circle) {
+                                        if (event.key == Hooray::Key::Enter) {
+                                            circle.radius += 5.0f;
+                                        }
                                     }
                                 }
                             },
