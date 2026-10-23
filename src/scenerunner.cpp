@@ -440,7 +440,7 @@ namespace Hooray {
     static void DrawRectElement(const RectangleShape &elem) {
         const auto rect = ::Rectangle{.x = elem.transform.position.x, .y = elem.transform.position.y, .width = elem.size.x, .height = elem.size.y};
         const auto origin = ::Vector2{.x = elem.transform.origin.x, .y = elem.transform.origin.y};
-        ::DrawRectanglePro(rect, {rect.width/2,rect.height/2}, elem.transform.rotation, ToRaylibColor(elem.fillColor));
+        ::DrawRectanglePro(rect, {rect.width * origin.x,rect.height * origin.y}, elem.transform.rotation, ToRaylibColor(elem.fillColor));
     }
 
     static void DrawCircleElement(const CircleShape &elem) {

@@ -28,7 +28,7 @@ int main() {
                                 .controller = Hooray::NodeCallbacks<Hooray::RectangleShape>{
                                     .onKeyEvent = [](const Hooray::KeyEvent& event, Hooray::RectangleShape& shape) {
                                         if (event.key == Hooray::Key::Enter) {
-                                            shape.transform.rotation += 15.0f; // Rotate the triangle by 15 degrees on Enter key press
+                                            shape.transform.rotation += 5.0f;
                                         }
                                     }
                                 }
@@ -52,10 +52,8 @@ int main() {
                                 },
                                 .controller = Hooray::NodeCallbacks<Hooray::Group> {
                                     .onKeyEvent = [](const Hooray::KeyEvent& event, Hooray::Group& shape) {
-                                        if (event.action == Hooray::KeyAction::Down && event.key == Hooray::Key::Space) {
-                                            shape.visible = false;
-                                        } else {
-                                            shape.visible = true;
+                                        if (event.action == Hooray::KeyAction::Pressed && event.key == Hooray::Key::Space) {
+                                            shape.visible = !shape.visible;
                                         }
                                     }
                                 }

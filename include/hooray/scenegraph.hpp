@@ -251,7 +251,7 @@ namespace Hooray {
         Vector2 position{.x = 0.0f, .y = 0.0f};
         float rotation{0.0f}; // in degrees
         Vector2 scale{.x = 1.0f, .y = 1.0f};
-        Vector2 origin{.x = 0.0f, .y = 0.0f};
+        Vector2 origin{.x = 0.5f, .y = 0.5f};
     };
 
     // Forward declarations
