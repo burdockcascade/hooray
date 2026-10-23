@@ -245,12 +245,35 @@ namespace Hooray {
 
 #pragma endregion
 
-#pragma region Node2D
+#pragma region Node
+
     struct Transform2D {
         Vector2 position{.x = 0.0f, .y = 0.0f};
         float rotation{0.0f}; // in degrees
         Vector2 scale{.x = 1.0f, .y = 1.0f};
         Vector2 origin{.x = 0.0f, .y = 0.0f};
+    };
+
+    // Forward declarations
+    struct Group;
+    struct RectangleShape;
+    struct CircleShape;
+    struct TriangleShape;
+
+    // VisualElement2D can be leaf shapes or a unique_ptr to a nested Node2D container
+    using VisualElement2D = std::variant<
+        Group,
+        RectangleShape,
+        CircleShape,
+        TriangleShape
+    >;
+
+    struct Group {
+        bool active{true};
+        bool visible{true};
+        Transform2D transform{};
+        std::vector<VisualElement2D> elements{};
+        ControllerSlot<Group> controller{};
     };
 
     struct RectangleShape {
@@ -279,8 +302,6 @@ namespace Hooray {
         Color fillColor{Colors::White};
         ControllerSlot<TriangleShape> controller{};
     };
-
-    using VisualElement2D = std::variant<RectangleShape, CircleShape, TriangleShape>;
 
 #pragma endregion
 

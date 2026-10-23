@@ -1,5 +1,4 @@
 #include <hooray.hpp>
-#include <memory>
 
 int main() {
     return Hooray::RunApp({
@@ -21,27 +20,46 @@ int main() {
                         },
                         .elements = {
                             Hooray::RectangleShape {
-                                .position = {.x = 10.0f, .y = 10.0f},
+                                .transform = {
+                                    .position = {.x = 10.0f, .y = 10.0f},
+                                },
                                 .size = {.x = 200.0f, .y = 150.0f},
-                                .fillColor = Hooray::Colors::Red
-                            },
-                            Hooray::CircleShape {
-                                .position = {.x = 40.0f, .y = 30.0f},
-                                .radius = 75.0f,
-                                .fillColor = Hooray::Colors::Green,
-                                .controller = Hooray::NodeCallbacks<Hooray::CircleShape>{
-                                    .onKeyEvent = [](const Hooray::KeyEvent& event, Hooray::CircleShape& circle) {
+                                .fillColor = Hooray::Colors::Red,
+                                .controller = Hooray::NodeCallbacks<Hooray::RectangleShape>{
+                                    .onKeyEvent = [](const Hooray::KeyEvent& event, Hooray::RectangleShape& shape) {
                                         if (event.key == Hooray::Key::Enter) {
-                                            circle.radius += 5.0f;
+                                            shape.transform.rotation += 15.0f; // Rotate the triangle by 15 degrees on Enter key press
                                         }
                                     }
                                 }
                             },
-                            Hooray::TriangleShape {
-                                .position = {.x = 60.0f, .y = 40.0f},
-                                .size = 100.0f,
-                                .fillColor = Hooray::Colors::Blue
-                            }
+                            Hooray::Group {
+                                .elements = {
+                                    Hooray::CircleShape {
+                                        .transform = {
+                                            .position = {.x = 40.0f, .y = 30.0f},
+                                        },
+                                        .radius = 75.0f,
+                                        .fillColor = Hooray::Colors::Green,
+                                    },
+                                    Hooray::TriangleShape {
+                                        .transform = {
+                                            .position = {.x = 60.0f, .y = 40.0f},
+                                        },
+                                        .size = 100.0f,
+                                        .fillColor = Hooray::Colors::Blue,
+                                    },
+                                },
+                                .controller = Hooray::NodeCallbacks<Hooray::Group> {
+                                    .onKeyEvent = [](const Hooray::KeyEvent& event, Hooray::Group& shape) {
+                                        if (event.action == Hooray::KeyAction::Down && event.key == Hooray::Key::Space) {
+                                            shape.visible = false;
+                                        } else {
+                                            shape.visible = true;
+                                        }
+                                    }
+                                }
+                            },
                         }
                     }
                 }

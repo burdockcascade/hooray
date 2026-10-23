@@ -465,7 +465,11 @@ namespace Hooray {
 
             if (!c.visible) return;
 
-            if constexpr (std::is_same_v<T, RectangleShape>) {
+            if constexpr (std::is_same_v<T, Group>) {
+                for (const auto& child : c.elements) {
+                    DrawElement(child);
+                }
+            } else if constexpr (std::is_same_v<T, RectangleShape>) {
                 DrawRectElement(c);
             } else if constexpr (std::is_same_v<T, CircleShape>) {
                 DrawCircleElement(c);
@@ -488,6 +492,10 @@ namespace Hooray {
                             DrawElement(elem);
                         }
                         ::EndMode2D();
+                    } else if constexpr (std::is_same_v<T, LayerUI>) {
+                        for (const auto& elem : layer.elements) {
+                            DrawElement(elem);
+                        }
                     }
                 }, layerVariant);
             }
