@@ -1,9 +1,39 @@
 #pragma once
 #include <functional>
+#include <memory>
 #include <string>
 #include <variant>
 
 namespace Hooray {
+
+#pragma region NodeController
+
+    template <typename T>
+    struct NodeController {
+        virtual ~NodeController() = default;
+
+        // Lifecycle
+        virtual void OnInit(T& node) {};
+        virtual void OnUpdate(float dt, T& node) {};
+        virtual void OnDestroy(float dt, T& node) { };
+
+    };
+
+    template <typename T>
+    struct NodeCallbacks {
+        std::function<void(T& node)> onInit{nullptr};
+        std::function<void(float dt, T& node)> onUpdate{nullptr};
+        std::function<void(T& node)> onDestroy{nullptr};
+    };
+
+    template <typename T>
+    using ControllerSlot = std::variant<
+        std::monostate,                         // empty / no controller
+        NodeCallbacks<T>,                       // lightweight callbacks
+        std::shared_ptr<NodeController<T>>      // class-based controller
+    >;
+
+#pragma endregion
 
 #pragma region Types
 
@@ -140,24 +170,29 @@ namespace Hooray {
 #pragma region Node2D
 
     struct RectangleShape {
+        bool active{true};
+        bool visible{true};
         Vector2 position{.x = 0.0f, .y = 0.0f};
         Vector2 size{.x = 100.0f, .y = 100.0f};
         Color fillColor{Colors::White};
-        bool visible{true};
+        ControllerSlot<RectangleShape> controller{};
     };
 
     struct CircleShape {
+        bool active{true};
+        bool visible{true};
         Vector2 position{.x = 0.0f, .y = 0.0f};
         float radius{50.0f};
         Color fillColor{Colors::White};
-        bool visible{true};
+        ControllerSlot<CircleShape> controller{};
     };
 
     struct TriangleShape {
+        bool active{true};
+        bool visible{true};
         Vector2 position{.x = 0.0f, .y = 0.0f};
         float size{50.0f};
         Color fillColor{Colors::White};
-        bool visible{true};
     };
 
     using VisualElement2D = std::variant<RectangleShape, CircleShape, TriangleShape>;
@@ -167,19 +202,34 @@ namespace Hooray {
 #pragma region Scene
 
     struct Camera2D {
+        bool active{true};
+        bool visible{true};
         Vector2 target{.x = 0.0f, .y = 0.0f};
         Vector2 offset{.x = 0.0f, .y = 0.0f};
         float rotation{0.0f};
         float zoom{1.0f};
     };
 
+    struct LayerUI {
+        bool active{true};
+        bool visible{true};
+        std::vector<VisualElement2D> elements{};
+    };
+
     struct Layer2D {
+        bool active{true};
+        bool visible{true};
         Camera2D camera{};
         std::vector<VisualElement2D> elements{};
+    };
+
+    struct Layer3D {
+        // Placeholder for future 3D layer implementation
+        bool active{true};
         bool visible{true};
     };
 
-    using Layer = std::variant<Layer2D>;
+    using Layer = std::variant<LayerUI, Layer2D, Layer3D>;
 
     struct Scene {
         bool active{true};
