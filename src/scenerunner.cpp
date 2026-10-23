@@ -53,8 +53,7 @@ namespace Hooray {
         }
 
         ::CloseWindow();
-
-        return 1;
+        return 0;
     }
 
     static void DrawRectElement(const RectangleShape &elem) {
