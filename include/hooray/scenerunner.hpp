@@ -29,6 +29,7 @@ namespace Hooray {
         AppConfig m_config;
         bool m_running = false;
         std::unordered_map<std::string, Texture> m_textureMap;
+        std::unordered_map<std::string, Font> m_fontMap;
     };
 
     inline int RunApp(AppConfig config) {

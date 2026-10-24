@@ -8,6 +8,13 @@ int main() {
             .height = 600,
             .targetFps = 60
         },
+        .assets = {
+            Hooray::FontAsset{
+                .id = "font1",
+                .path = R"(..\..\examples\assets\Roboto-Regular.ttf)",
+                .baseSize = 64
+            }
+        },
         .scenes = {
             Hooray::Scene {
                 .layers = {
@@ -76,6 +83,18 @@ int main() {
                                     }
                                 }
                             },
+                        }
+                    },
+                    Hooray::LayerUI {
+                        .elements = {
+                            Hooray::Text {
+                                .text = "Hello, Hooray!",
+                                .font_id = "font1",
+                                .transform = {
+                                    .position = {.x = 50.0f, .y = 50.0f},
+                                },
+                                .color = Hooray::Colors::Black,
+                            }
                         }
                     }
                 }

@@ -97,26 +97,12 @@ int main() {
                     },
                     Hooray::LayerUI {
                         .elements = {
-                        Hooray::RectangleShape {
+                            Hooray::Text {
+                                .text = "Hello, Hooray!",
                                 .transform = {
-                                    .position = {.x = 10.0f, .y = 10.0f},
+                                    .position = {.x = 50.0f, .y = 50.0f},
                                 },
-                                .size = {.x = 200.0f, .y = 150.0f},
-                                .fillColor = Hooray::Colors::Red
-                            },
-                            Hooray::CircleShape {
-                                .transform = {
-                                    .position = {.x = 40.0f, .y = 30.0f},
-                                },
-                                .radius = 75.0f,
-                                .fillColor = Hooray::Colors::Green
-                            },
-                            Hooray::TriangleShape {
-                                .transform = {
-                                    .position = {.x = 60.0f, .y = 40.0f},
-                                },
-                                .size = 100.0f,
-                                .fillColor = Hooray::Colors::Blue
+                                .color = Hooray::Colors::Black,
                             }
                         }
                     }

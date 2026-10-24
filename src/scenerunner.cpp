@@ -19,6 +19,10 @@ namespace Hooray {
             };
         }
 
+        ::Font ToRaylibFont(const FontHandle& handle) {
+            return std::bit_cast<::Font>(handle);
+        }
+
         ::Texture2D ToRaylibTexture(const TextureHandle& handle) {
             return std::bit_cast<::Texture2D>(handle);
         }
@@ -516,6 +520,36 @@ namespace Hooray {
         ::rlPopMatrix();
     }
 
+    static void DrawTextElement(const Text& elem, const std::unordered_map<std::string, Font>& fontMap) {
+        if (elem.text.empty()) return;
+
+        ::Font raylibFont = ::GetFontDefault();
+        if (!elem.font_id.empty()) {
+            if (const auto it = fontMap.find(elem.font_id); it != fontMap.end()) {
+                raylibFont = ToRaylibFont(it->second.handle());
+                elem.fontSize = (elem.fontSize <= 0.0f) ? static_cast<float>(raylibFont.baseSize) : elem.fontSize;
+            } else {
+                std::cerr << "Font ID not found: " << elem.font_id << ", using default.\n";
+            }
+        }
+
+        // Measure text dimensions to position according to transform.origin
+        const ::Vector2 textSize = ::MeasureTextEx(raylibFont, elem.text.c_str(), elem.fontSize, elem.spacing);
+
+        ::rlPushMatrix();
+        ::rlTranslatef(elem.transform.position.x, elem.transform.position.y, 0.0f);
+        ::rlRotatef(elem.transform.rotation, 0.0f, 0.0f, 1.0f);
+        ::rlScalef(elem.transform.scale.x, elem.transform.scale.y, 1.0f);
+
+        const ::Vector2 localPos = {
+            -textSize.x * elem.transform.origin.x,
+            -textSize.y * elem.transform.origin.y
+        };
+
+        ::DrawTextEx(raylibFont, elem.text.c_str(), localPos, elem.fontSize, elem.spacing, ToRaylibColor(elem.color));
+        ::rlPopMatrix();
+    }
+
     void DeclarativeApp::DrawElement(const VisualElement2D &elem) {
         std::visit([&]<typename T0>(const T0& c) {
             using T = std::decay_t<T0>;
@@ -543,6 +577,8 @@ namespace Hooray {
                 DrawTriangleShape(c);
             } else if constexpr (std::is_same_v<T, Sprite>) {
                 DrawSpriteElement(c, m_textureMap);
+            } else if constexpr (std::is_same_v<T, Text>) {
+                DrawTextElement(c, m_fontMap);
             }
         }, elem);
     }
@@ -552,11 +588,14 @@ namespace Hooray {
 
         for (auto asset : m_config.assets) {
             std::visit([&]<typename T0>(T0& item) {
-                using T = std::decay_t<T0>;
+                using Tx = std::decay_t<T0>;
 
-                if constexpr (std::is_same_v<T, TextureAsset>) {
+                if constexpr (std::is_same_v<Tx, TextureAsset>) {
                     Texture texture(item.path);
                     m_textureMap.insert_or_assign(item.id, std::move(texture));
+                } else if constexpr (std::is_same_v<Tx, FontAsset>) {
+                    Font font(item.path, item.baseSize);
+                    m_fontMap.insert_or_assign(item.id, std::move(font));
                 }
             }, asset);
         }
