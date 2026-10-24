@@ -1,6 +1,7 @@
 #include <hooray/scenerunner.hpp>
 #include <iostream>
 #include "raylib.h"
+#include "rlgl.h"
 
 namespace Hooray {
 
@@ -318,6 +319,22 @@ namespace Hooray {
             }
         }
 
+        template <typename Fn>
+        void TraverseElement(VisualElement2D& elem, Fn&& fn) {
+            std::visit([&](auto& node) {
+                using T = std::decay_t<decltype(node)>;
+                if (!node.active) return;
+
+                fn(node);
+
+                if constexpr (std::is_same_v<T, Group>) {
+                    for (auto& child : node.elements) {
+                        TraverseElement(child, fn);
+                    }
+                }
+            }, elem);
+        }
+
         void ForEachActiveElement(std::vector<Scene>& scenes, auto&& fn) {
             for (auto& scene : scenes) {
                 if (!scene.active) continue;
@@ -333,12 +350,12 @@ namespace Hooray {
                             }
 
                             for (auto& elem : layer.elements) {
-                                std::visit(fn, elem);
+                                TraverseElement(elem, fn);
                             }
                         } else if constexpr (std::is_same_v<L, LayerUI>) {
                             if (!layer.active) return;
                             for (auto& elem : layer.elements) {
-                                std::visit(fn, elem);
+                                TraverseElement(elem, fn);
                             }
                         }
                     }, layerVariant);
@@ -438,25 +455,41 @@ namespace Hooray {
     }
 
     static void DrawRectElement(const RectangleShape &elem) {
-        const auto rect = ::Rectangle{.x = elem.transform.position.x, .y = elem.transform.position.y, .width = elem.size.x, .height = elem.size.y};
-        const auto origin = ::Vector2{.x = elem.transform.origin.x, .y = elem.transform.origin.y};
-        ::DrawRectanglePro(rect, {rect.width * origin.x,rect.height * origin.y}, elem.transform.rotation, ToRaylibColor(elem.fillColor));
+        const float w = elem.size.x * elem.transform.scale.x;
+        const float h = elem.size.y * elem.transform.scale.y;
+
+        ::rlPushMatrix();
+        ::rlTranslatef(elem.transform.position.x, elem.transform.position.y, 0.0f);
+        ::rlRotatef(elem.transform.rotation, 0.0f, 0.0f, 1.0f);
+
+        // Draw around origin point
+        const ::Rectangle rect = { .x = -w * elem.transform.origin.x, .y = -h * elem.transform.origin.y, .width = w, .height = h };
+        ::DrawRectangleRec(rect, ToRaylibColor(elem.fillColor));
+        ::rlPopMatrix();
     }
 
     static void DrawCircleElement(const CircleShape &elem) {
-        ::DrawCircleV(
-            ::Vector2{.x = elem.transform.position.x, .y = elem.transform.position.y},
-            elem.radius,
-            ToRaylibColor(elem.fillColor)
-        );
+        ::rlPushMatrix();
+        ::rlTranslatef(elem.transform.position.x, elem.transform.position.y, 0.0f);
+        ::rlRotatef(elem.transform.rotation, 0.0f, 0.0f, 1.0f);
+        ::rlScalef(elem.transform.scale.x, elem.transform.scale.y, 1.0f);
+
+        ::DrawCircleV({.x = 0.0f, .y = 0.0f}, elem.radius, ToRaylibColor(elem.fillColor));
+        ::rlPopMatrix();
     }
 
     static void DrawTriangleShape(const TriangleShape &elem) {
-        const ::Vector2 v1 = {.x = elem.transform.position.x, .y = elem.transform.position.y};
-        const ::Vector2 v2 = {.x = elem.transform.position.x - elem.size / 2.0f, .y = elem.transform.position.y + elem.size};
-        const ::Vector2 v3 = {.x = elem.transform.position.x + elem.size / 2.0f, .y = elem.transform.position.y + elem.size};
+        ::rlPushMatrix();
+        ::rlTranslatef(elem.transform.position.x, elem.transform.position.y, 0.0f);
+        ::rlRotatef(elem.transform.rotation, 0.0f, 0.0f, 1.0f);
+        ::rlScalef(elem.transform.scale.x, elem.transform.scale.y, 1.0f);
+
+        const ::Vector2 v1 = {.x = 0.0f, .y = 0.0f};
+        const ::Vector2 v2 = {.x = -elem.size / 2.0f, .y = elem.size};
+        const ::Vector2 v3 = {.x = elem.size / 2.0f, .y = elem.size};
 
         ::DrawTriangle(v1, v2, v3, ToRaylibColor(elem.fillColor));
+        ::rlPopMatrix();
     }
 
     void DeclarativeApp::DrawElement(const VisualElement2D &elem) {
@@ -466,9 +499,18 @@ namespace Hooray {
             if (!c.visible) return;
 
             if constexpr (std::is_same_v<T, Group>) {
+
+                ::rlPushMatrix();
+                ::rlTranslatef(c.transform.position.x, c.transform.position.y, 0.0f);
+                ::rlRotatef(c.transform.rotation, 0.0f, 0.0f, 1.0f);
+                ::rlScalef(c.transform.scale.x, c.transform.scale.y, 1.0f);
+
                 for (const auto& child : c.elements) {
                     DrawElement(child);
                 }
+
+                ::rlPopMatrix();
+
             } else if constexpr (std::is_same_v<T, RectangleShape>) {
                 DrawRectElement(c);
             } else if constexpr (std::is_same_v<T, CircleShape>) {

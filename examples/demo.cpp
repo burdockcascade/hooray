@@ -34,6 +34,9 @@ int main() {
                                 }
                             },
                             Hooray::Group {
+                                .transform = {
+                                    .position = {.x = 300.0f, .y = 200.0f},
+                                },
                                 .elements = {
                                     Hooray::CircleShape {
                                         .transform = {
@@ -54,6 +57,21 @@ int main() {
                                     .onKeyEvent = [](const Hooray::KeyEvent& event, Hooray::Group& shape) {
                                         if (event.action == Hooray::KeyAction::Pressed && event.key == Hooray::Key::Space) {
                                             shape.visible = !shape.visible;
+                                        }
+                                        if (event.action == Hooray::KeyAction::Down && event.key == Hooray::Key::Right) {
+                                            shape.transform.position.x += 1.0f;
+                                        }
+                                        if (event.action == Hooray::KeyAction::Down && event.key == Hooray::Key::Left) {
+                                            shape.transform.position.x -= 1.0f;
+                                        }
+                                        if (event.action == Hooray::KeyAction::Down && event.key == Hooray::Key::Up) {
+                                            shape.transform.position.y -= 1.0f;
+                                        }
+                                        if (event.action == Hooray::KeyAction::Down && event.key == Hooray::Key::Down) {
+                                            shape.transform.position.y += 1.0f;
+                                        }
+                                        if (event.action == Hooray::KeyAction::Down && event.key == Hooray::Key::R) {
+                                            shape.transform.rotation += 5.0f;
                                         }
                                     }
                                 }
