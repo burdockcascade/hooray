@@ -19,6 +19,10 @@ namespace Hooray {
             };
         }
 
+        ::Texture2D ToRaylibTexture(const TextureHandle& handle) {
+            return std::bit_cast<::Texture2D>(handle);
+        }
+
 #pragma region Keyboard
 
         int HoorayKeyToRaylib(Key key) {
@@ -278,20 +282,6 @@ namespace Hooray {
 #pragma endregion
 
         template <typename T>
-        void ProcessInit(T& node) {
-            if constexpr (requires { node.controller; }) {
-                std::visit([&](auto& ctrl) {
-                    using SlotType = std::decay_t<decltype(ctrl)>;
-                    if constexpr (std::is_same_v<SlotType, NodeCallbacks<T>>) {
-                        if (ctrl.onInit) ctrl.onInit(node);
-                    } else if constexpr (std::is_same_v<SlotType, std::shared_ptr<NodeController<T>>>) {
-                        if (ctrl) ctrl->OnInit(node);
-                    }
-                }, node.controller);
-            }
-        }
-
-        template <typename T>
         void ProcessUpdate(float dt, T& node) {
             if constexpr (requires { node.controller; }) {
                 std::visit([&](auto& ctrl) {
@@ -398,7 +388,7 @@ namespace Hooray {
         m_running = true;
 
         // Initialize all controllers
-        ForEachActiveElement(m_config.scenes, [](auto& elem) {
+        ForEachActiveElement(m_config.scenes, [this](auto& elem) {
             ProcessInit(elem);
         });
 
@@ -492,6 +482,40 @@ namespace Hooray {
         ::rlPopMatrix();
     }
 
+    static void DrawSpriteElement(const Sprite &elem, const std::unordered_map<std::string, Texture>& textureMap) {
+        const auto it = textureMap.find(elem.texture_id);
+        if (it == textureMap.end()) {
+            std::cerr << "Texture ID not found: " << elem.texture_id << std::endl;
+            return;
+        }
+
+        const Texture& texture = it->second;
+
+        const auto texW = static_cast<float>(texture.handle().width);
+        const auto texH = static_cast<float>(texture.handle().height);
+
+        Vector2 destSize = elem.size;
+        if (destSize.x <= 0.0f && destSize.y <= 0.0f) {
+            destSize = { .x = texW, .y = texH };
+        }
+
+        ::rlPushMatrix();
+        ::rlTranslatef(elem.transform.position.x, elem.transform.position.y, 0.0f);
+        ::rlRotatef(elem.transform.rotation, 0.0f, 0.0f, 1.0f);
+        ::rlScalef(elem.transform.scale.x, elem.transform.scale.y, 1.0f);
+
+        const ::Rectangle srcRect = { 0.0f, 0.0f, texW, texH };
+        const ::Rectangle destRect = {
+            -destSize.x * elem.transform.origin.x,
+            -destSize.y * elem.transform.origin.y,
+            destSize.x,
+            destSize.y
+        };
+
+        ::DrawTexturePro(ToRaylibTexture(texture.handle()), srcRect, destRect, {0.0f, 0.0f}, 0.0f, ToRaylibColor(elem.tint));
+        ::rlPopMatrix();
+    }
+
     void DeclarativeApp::DrawElement(const VisualElement2D &elem) {
         std::visit([&]<typename T0>(const T0& c) {
             using T = std::decay_t<T0>;
@@ -517,8 +541,36 @@ namespace Hooray {
                 DrawCircleElement(c);
             } else if constexpr (std::is_same_v<T, TriangleShape>) {
                 DrawTriangleShape(c);
+            } else if constexpr (std::is_same_v<T, Sprite>) {
+                DrawSpriteElement(c, m_textureMap);
             }
         }, elem);
+    }
+
+    template <typename T>
+    void DeclarativeApp::ProcessInit(T& node) {
+
+        for (auto asset : m_config.assets) {
+            std::visit([&]<typename T0>(T0& item) {
+                using T = std::decay_t<T0>;
+
+                if constexpr (std::is_same_v<T, TextureAsset>) {
+                    Texture texture(item.path);
+                    m_textureMap.insert_or_assign(item.id, std::move(texture));
+                }
+            }, asset);
+        }
+
+        if constexpr (requires { node.controller; }) {
+            std::visit([&](auto& ctrl) {
+                using SlotType = std::decay_t<decltype(ctrl)>;
+                if constexpr (std::is_same_v<SlotType, NodeCallbacks<T>>) {
+                    if (ctrl.onInit) ctrl.onInit(node);
+                } else if constexpr (std::is_same_v<SlotType, std::shared_ptr<NodeController<T>>>) {
+                    if (ctrl) ctrl->OnInit(node);
+                }
+            }, node.controller);
+        }
     }
 
     void DeclarativeApp::OnDraw() {

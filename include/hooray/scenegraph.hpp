@@ -1,4 +1,5 @@
 #pragma once
+#include <filesystem>
 #include <functional>
 #include <memory>
 #include <string>
@@ -125,6 +126,42 @@ namespace Hooray {
     struct Vector2 {
         float x{0.0f};
         float y{0.0f};
+    };
+
+    struct TextureHandle {
+        uint32_t id{0};
+        int width{0};
+        int height{0};
+        int format{0};
+        int mipmaps{0};
+    };
+
+    class Texture {
+    public:
+        explicit Texture(const std::filesystem::path& path) noexcept;
+        explicit constexpr Texture(TextureHandle handle = {}) noexcept : handle_{handle} {}
+
+        ~Texture() noexcept;
+
+        // Move-only semantics
+        Texture(const Texture&) = delete;
+        auto operator=(const Texture&) -> Texture& = delete;
+
+        constexpr Texture(Texture&& other) noexcept
+            : handle_{std::exchange(other.handle_, TextureHandle{})} {}
+
+        auto operator=(Texture&& other) noexcept -> Texture&;
+
+        [[nodiscard]] constexpr auto is_valid() const noexcept -> bool {
+            return handle_.id > 0;
+        }
+
+        [[nodiscard]] constexpr auto handle() const noexcept -> const TextureHandle& {
+            return handle_;
+        }
+
+    private:
+        TextureHandle handle_{};
     };
 
 #pragma endregion
@@ -259,13 +296,15 @@ namespace Hooray {
     struct RectangleShape;
     struct CircleShape;
     struct TriangleShape;
+    struct Sprite;
 
     // VisualElement2D can be leaf shapes or a unique_ptr to a nested Node2D container
     using VisualElement2D = std::variant<
         Group,
         RectangleShape,
         CircleShape,
-        TriangleShape
+        TriangleShape,
+        Sprite
     >;
 
     struct Group {
@@ -301,6 +340,16 @@ namespace Hooray {
         float size{50.0f};
         Color fillColor{Colors::White};
         ControllerSlot<TriangleShape> controller{};
+    };
+
+    struct Sprite {
+        bool active{true};
+        bool visible{true};
+        std::string texture_id;
+        Transform2D transform{};
+        Vector2 size{0.0f, 0.0f};
+        Color tint{Colors::White};
+        ControllerSlot<Sprite> controller{};
     };
 
 #pragma endregion
@@ -348,6 +397,18 @@ namespace Hooray {
 
 #pragma region Window
 
+    struct TextureAsset {
+        std::string id;
+        std::filesystem::path path;
+    };
+
+    struct FontAsset {
+        std::string id;
+        std::filesystem::path path;
+    };
+
+    using Asset = std::variant<TextureAsset, FontAsset>;
+
     struct WindowConfig {
         std::string title = "Hooray App";
         int width = 1280;
@@ -360,6 +421,7 @@ namespace Hooray {
 
     struct AppConfig {
         WindowConfig window{};
+        std::vector<Asset> assets{};
         std::vector<Scene> scenes{};
     };
 

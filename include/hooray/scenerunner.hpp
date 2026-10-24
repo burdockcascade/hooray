@@ -18,6 +18,9 @@ namespace Hooray {
 
         void DrawElement(const VisualElement2D &elem);
 
+        template<class T>
+        void ProcessInit(T &node);
+
         void OnDraw();
 
         void quit();
@@ -25,6 +28,7 @@ namespace Hooray {
     private:
         AppConfig m_config;
         bool m_running = false;
+        std::unordered_map<std::string, Texture> m_textureMap;
     };
 
     inline int RunApp(AppConfig config) {

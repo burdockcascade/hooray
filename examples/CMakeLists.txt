@@ -21,3 +21,9 @@ target_link_libraries(camera2d PRIVATE hooray)
 set_target_properties(camera2d PROPERTIES
         VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/.."
 )
+
+add_executable(image image.cpp)
+target_link_libraries(image PRIVATE hooray)
+set_target_properties(image PROPERTIES
+        VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/.."
+)
