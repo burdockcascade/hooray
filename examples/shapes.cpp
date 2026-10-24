@@ -20,19 +20,44 @@ int main() {
                         },
                         .elements = {
                             Hooray::RectangleShape {
-                                .position = {.x = 10.0f, .y = 10.0f},
+                                .transform = {
+                                    .position = {.x = 10.0f, .y = 10.0f},
+                                },
                                 .size = {.x = 200.0f, .y = 150.0f},
                                 .fillColor = Hooray::Colors::Red
                             },
                             Hooray::CircleShape {
-                                .position = {.x = 40.0f, .y = 30.0f},
+                                .transform = {
+                                    .position = {.x = 40.0f, .y = 30.0f},
+                                },
                                 .radius = 75.0f,
                                 .fillColor = Hooray::Colors::Green
                             },
                             Hooray::TriangleShape {
-                                .position = {.x = 60.0f, .y = 40.0f},
+                                .transform = {
+                                    .position = {.x = 60.0f, .y = 40.0f},
+                                },
                                 .size = 100.0f,
-                                .fillColor = Hooray::Colors::Blue
+                                .fillColor = Hooray::Colors::Blue,
+                                .controller = Hooray::NodeCallbacks<Hooray::TriangleShape> {
+                                    .onKeyEvent = [](const Hooray::KeyEvent& event, Hooray::TriangleShape& shape) {
+                                        if (event.action == Hooray::KeyAction::Down && event.key == Hooray::Key::Right) {
+                                            shape.transform.position.x += 1.0f;
+                                        }
+                                        if (event.action == Hooray::KeyAction::Down && event.key == Hooray::Key::Left) {
+                                            shape.transform.position.x -= 1.0f;
+                                        }
+                                        if (event.action == Hooray::KeyAction::Down && event.key == Hooray::Key::Up) {
+                                            shape.transform.position.y -= 1.0f;
+                                        }
+                                        if (event.action == Hooray::KeyAction::Down && event.key == Hooray::Key::Down) {
+                                            shape.transform.position.y += 1.0f;
+                                        }
+                                        if (event.action == Hooray::KeyAction::Down && event.key == Hooray::Key::R) {
+                                            shape.transform.rotation += 5.0f;
+                                        }
+                                    }
+                                }
                             }
                         }
                     }

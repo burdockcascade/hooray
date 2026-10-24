@@ -7,7 +7,7 @@
 int main() {
     return Hooray::RunApp({
         .window = {
-            .title = "Hooray Demo",
+            .title = "Hooray Shapes Demo",
             .width = 800,
             .height = 600,
             .targetFps = 60
@@ -28,40 +28,23 @@ int main() {
                                     .position = {.x = 10.0f, .y = 10.0f},
                                 },
                                 .size = {.x = 200.0f, .y = 150.0f},
-                                .fillColor = Hooray::Colors::Red,
-                                .controller = Hooray::NodeCallbacks<Hooray::RectangleShape>{
-                                    .onKeyEvent = [](const Hooray::KeyEvent& event, Hooray::RectangleShape& shape) {
-                                        if (event.key == Hooray::Key::Enter) {
-                                            shape.transform.rotation += 5.0f;
-                                        }
-                                    }
-                                }
+                                .fillColor = Hooray::Colors::Red
                             },
-                            Hooray::Group {
+                            Hooray::CircleShape {
                                 .transform = {
-                                    .position = {.x = 300.0f, .y = 200.0f},
+                                    .position = {.x = 40.0f, .y = 30.0f},
                                 },
-                                .elements = {
-                                    Hooray::CircleShape {
-                                        .transform = {
-                                            .position = {.x = 40.0f, .y = 30.0f},
-                                        },
-                                        .radius = 75.0f,
-                                        .fillColor = Hooray::Colors::Green,
-                                    },
-                                    Hooray::TriangleShape {
-                                        .transform = {
-                                            .position = {.x = 60.0f, .y = 40.0f},
-                                        },
-                                        .size = 100.0f,
-                                        .fillColor = Hooray::Colors::Blue,
-                                    },
+                                .radius = 75.0f,
+                                .fillColor = Hooray::Colors::Green
+                            },
+                            Hooray::TriangleShape {
+                                .transform = {
+                                    .position = {.x = 60.0f, .y = 40.0f},
                                 },
-                                .controller = Hooray::NodeCallbacks<Hooray::Group> {
-                                    .onKeyEvent = [](const Hooray::KeyEvent& event, Hooray::Group& shape) {
-                                        if (event.action == Hooray::KeyAction::Pressed && event.key == Hooray::Key::Space) {
-                                            shape.visible = !shape.visible;
-                                        }
+                                .size = 100.0f,
+                                .fillColor = Hooray::Colors::Blue,
+                                .controller = Hooray::NodeCallbacks<Hooray::TriangleShape> {
+                                    .onKeyEvent = [](const Hooray::KeyEvent& event, Hooray::TriangleShape& shape) {
                                         if (event.action == Hooray::KeyAction::Down && event.key == Hooray::Key::Right) {
                                             shape.transform.position.x += 1.0f;
                                         }
@@ -79,7 +62,7 @@ int main() {
                                         }
                                     }
                                 }
-                            },
+                            }
                         }
                     }
                 }
