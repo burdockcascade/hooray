@@ -20,7 +20,6 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(raylib)
 
 add_library(hooray STATIC
-        src/scenegraph.cpp
         src/scenerunner.cpp
 )
 
