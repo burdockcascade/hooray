@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.28)
 project(hooray LANGUAGES CXX)
 
 # Require C++23 standard
-set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -29,7 +29,6 @@ target_include_directories(hooray PUBLIC
         $<INSTALL_INTERFACE:include>
 )
 
-target_compile_features(hooray PUBLIC cxx_std_23)
 target_link_libraries(hooray PUBLIC raylib)
 
 add_subdirectory(examples)
