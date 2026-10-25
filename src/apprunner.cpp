@@ -1,5 +1,5 @@
 #include <array>
-#include <hooray/scenerunner.hpp>
+#include <hooray/apprunner.hpp>
 #include <iostream>
 #include <ranges>
 #include "raylibtools.hpp"
