@@ -26,32 +26,27 @@ int main() {
             Hooray::Scene {
                 .layers = {
                     Hooray::Layer2D {
-                        .camera = {
-                            .target = {.x = 0.0f, .y = 0.0f},
-                            .offset = {.x = 400.0f, .y = 300.0f},
-                            .rotation = 0.0f,
-                            .zoom = 1.0f
-                        },
                         .elements = {
                             Hooray::Sprite{
                                 .visible = false,
                                 .texture_id = "sample_img1",
                                 .transform = {
-                                    .position = {.x = 10.0f, .y = 10.0f}
+                                    .position = {.x = 0.0f, .y = 10.0f}
                                 }
                             },
                             Hooray::Sprite{
                                 .visible = true,
                                 .texture_id = "sample_img2",
                                 .transform = {
-                                    .position = {.x = 30.0f, .y = 30.0f}
+                                    .position = {.x = 0.0f, .y = 0.0f},
+                                    .scale = {.x = 0.5f, .y = 0.5f}
                                 }
                             },
                             Hooray::Sprite{
                                 .visible = false,
                                 .texture_id = "bird_img",
                                 .transform = {
-                                    .position = {.x = 100.0f, .y = 100.0f}
+                                    .position = {.x = 0.0f, .y = 0.0f}
                                 }
                             }
                         }
