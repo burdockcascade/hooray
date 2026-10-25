@@ -286,6 +286,8 @@ namespace Hooray {
 
             ProcessMouseEvents();
             ProcessKeyboardEvents();
+            ProcessGamepadEvents();
+            ProcessTouchEvents();
 
             // Update controllers
             ForEachActiveElement(m_config.scenes, [dt](auto& elem) {
@@ -294,10 +296,6 @@ namespace Hooray {
 
             ::BeginDrawing();
             ::ClearBackground(ToRaylibColor(m_config.window.bgColor));
-
-            if (m_config.window.flags.showFPS) {
-                ::DrawFPS(10, 10);
-            }
 
             OnDraw();
             ::EndDrawing();
@@ -419,6 +417,14 @@ namespace Hooray {
             });
         }
 
+    }
+
+    void HoorayApp::ProcessGamepadEvents() {
+        // Placeholder for future gamepad event processing
+    }
+
+    void HoorayApp::ProcessTouchEvents() {
+        // Placeholder for future touch event processing
     }
 
     static void DrawRectElement(const RectangleShape &elem) {
@@ -590,6 +596,10 @@ namespace Hooray {
                     }
                 }, layerVariant);
             }
+        }
+
+        if (m_config.window.flags.showFPS) {
+            ::DrawFPS(10, 10);
         }
     }
 

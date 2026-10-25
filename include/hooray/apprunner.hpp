@@ -18,6 +18,8 @@ namespace Hooray {
 
         void ProcessMouseEvents();
         void ProcessKeyboardEvents();
+        void ProcessGamepadEvents();
+        void ProcessTouchEvents();
 
         void DrawElement(const VisualElement2D &elem);
 
