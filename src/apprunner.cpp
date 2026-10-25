@@ -262,7 +262,7 @@ namespace Hooray {
 
     HoorayApp::HoorayApp(AppConfig config) : m_config(std::move(config)) {}
 
-    int HoorayApp::run() {
+    int HoorayApp::Run() {
 
         if (m_config.window.flags.resizable) {
             ::SetConfigFlags(FLAG_WINDOW_RESIZABLE);
@@ -372,7 +372,7 @@ namespace Hooray {
             };
         }
 
-        // 4. Dispatch Mouse Events
+        // Dispatch Mouse Events
         if (eventCount > 0) {
             const std::span<const MouseEvent> activeMouseEvents(mouseEvents.data(), eventCount);
             ForEachActiveElement(m_config.scenes, [activeMouseEvents](auto& elem) {
@@ -624,7 +624,7 @@ namespace Hooray {
         m_fontMap.clear();
     }
 
-    void HoorayApp::quit() {
+    void HoorayApp::Quit() {
         m_running = false;
     }
 

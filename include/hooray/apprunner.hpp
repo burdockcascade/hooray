@@ -14,7 +14,7 @@ namespace Hooray {
         HoorayApp(const HoorayApp&) = delete;
         HoorayApp& operator=(const HoorayApp&) = delete;
 
-        int run();
+        int Run();
 
         void ProcessMouseEvents();
         void ProcessKeyboardEvents();
@@ -31,7 +31,7 @@ namespace Hooray {
         void LoadGlobalAssets();
         void UnloadGlobalAssets();
 
-        void quit();
+        void Quit();
 
     private:
         AppConfig m_config;
@@ -42,7 +42,7 @@ namespace Hooray {
 
     inline int RunApp(AppConfig config) {
         HoorayApp app(std::move(config));
-        return app.run();
+        return app.Run();
     }
 
 }
