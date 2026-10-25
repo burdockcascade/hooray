@@ -1,289 +1,98 @@
+#include <array>
 #include <hooray/scenerunner.hpp>
 #include <iostream>
 #include <ranges>
-
+#include "raylibtools.hpp"
 #include "raylib.h"
 #include "rlgl.h"
 
 namespace Hooray {
 
     namespace {
-        ::Color ToRaylibColor(Color c) {
-            return ::Color{.r = c.r, .g = c.g, .b = c.b, .a = c.a};
-        }
-
-        ::Camera2D ToRaylibCamera2D(const Camera2D& cam) {
-            return ::Camera2D{
-                .offset = {.x = cam.offset.x, .y = cam.offset.y},
-                .target = {.x = cam.target.x, .y = cam.target.y},
-                .rotation = cam.rotation,
-                .zoom = cam.zoom
-            };
-        }
-
-        ::Font ToRaylibFont(const FontHandle& handle) {
-            return std::bit_cast<::Font>(handle);
-        }
-
-        ::Texture2D ToRaylibTexture(const TextureHandle& handle) {
-            return std::bit_cast<::Texture2D>(handle);
-        }
 
 #pragma region Keyboard
 
-        int HoorayKeyToRaylib(Key key) {
-            switch (key) {
-                // Control & Whitespace
-                case Key::Space:            return ::KEY_SPACE;
-                case Key::Escape:           return ::KEY_ESCAPE;
-                case Key::Enter:            return ::KEY_ENTER;
-                case Key::Tab:              return ::KEY_TAB;
-                case Key::Backspace:        return ::KEY_BACKSPACE;
-                case Key::Insert:           return ::KEY_INSERT;
-                case Key::Delete:           return ::KEY_DELETE;
-
-                // Navigation
-                case Key::Right:            return ::KEY_RIGHT;
-                case Key::Left:             return ::KEY_LEFT;
-                case Key::Down:             return ::KEY_DOWN;
-                case Key::Up:               return ::KEY_UP;
-                case Key::PageUp:           return ::KEY_PAGE_UP;
-                case Key::PageDown:         return ::KEY_PAGE_DOWN;
-                case Key::Home:             return ::KEY_HOME;
-                case Key::End:              return ::KEY_END;
-
-                // Locks
-                case Key::CapsLock:         return ::KEY_CAPS_LOCK;
-                case Key::ScrollLock:       return ::KEY_SCROLL_LOCK;
-                case Key::NumLock:          return ::KEY_NUM_LOCK;
-                case Key::PrintScreen:      return ::KEY_PRINT_SCREEN;
-                case Key::Pause:            return ::KEY_PAUSE;
-
-                // Number Keys (Top Row)
-                case Key::Zero:             return ::KEY_ZERO;
-                case Key::One:              return ::KEY_ONE;
-                case Key::Two:              return ::KEY_TWO;
-                case Key::Three:            return ::KEY_THREE;
-                case Key::Four:             return ::KEY_FOUR;
-                case Key::Five:             return ::KEY_FIVE;
-                case Key::Six:              return ::KEY_SIX;
-                case Key::Seven:            return ::KEY_SEVEN;
-                case Key::Eight:            return ::KEY_EIGHT;
-                case Key::Nine:             return ::KEY_NINE;
-
-                // Alphabet Keys
-                case Key::A:                return ::KEY_A;
-                case Key::B:                return ::KEY_B;
-                case Key::C:                return ::KEY_C;
-                case Key::D:                return ::KEY_D;
-                case Key::E:                return ::KEY_E;
-                case Key::F:                return ::KEY_F;
-                case Key::G:                return ::KEY_G;
-                case Key::H:                return ::KEY_H;
-                case Key::I:                return ::KEY_I;
-                case Key::J:                return ::KEY_J;
-                case Key::K:                return ::KEY_K;
-                case Key::L:                return ::KEY_L;
-                case Key::M:                return ::KEY_M;
-                case Key::N:                return ::KEY_N;
-                case Key::O:                return ::KEY_O;
-                case Key::P:                return ::KEY_P;
-                case Key::Q:                return ::KEY_Q;
-                case Key::R:                return ::KEY_R;
-                case Key::S:                return ::KEY_S;
-                case Key::T:                return ::KEY_T;
-                case Key::U:                return ::KEY_U;
-                case Key::V:                return ::KEY_V;
-                case Key::W:                return ::KEY_W;
-                case Key::X:                return ::KEY_X;
-                case Key::Y:                return ::KEY_Y;
-                case Key::Z:                return ::KEY_Z;
-
-                // Function Keys
-                case Key::F1:               return ::KEY_F1;
-                case Key::F2:               return ::KEY_F2;
-                case Key::F3:               return ::KEY_F3;
-                case Key::F4:               return ::KEY_F4;
-                case Key::F5:               return ::KEY_F5;
-                case Key::F6:               return ::KEY_F6;
-                case Key::F7:               return ::KEY_F7;
-                case Key::F8:               return ::KEY_F8;
-                case Key::F9:               return ::KEY_F9;
-                case Key::F10:              return ::KEY_F10;
-                case Key::F11:              return ::KEY_F11;
-                case Key::F12:              return ::KEY_F12;
-
-                // Modifiers
-                case Key::LeftShift:        return ::KEY_LEFT_SHIFT;
-                case Key::LeftControl:      return ::KEY_LEFT_CONTROL;
-                case Key::LeftAlt:          return ::KEY_LEFT_ALT;
-                case Key::LeftSuper:        return ::KEY_LEFT_SUPER;
-                case Key::RightShift:       return ::KEY_RIGHT_SHIFT;
-                case Key::RightControl:     return ::KEY_RIGHT_CONTROL;
-                case Key::RightAlt:         return ::KEY_RIGHT_ALT;
-                case Key::RightSuper:       return ::KEY_RIGHT_SUPER;
-                case Key::Menu:             return ::KEY_KB_MENU;
-
-                // Punctuation & Symbols
-                case Key::Apostrophe:       return ::KEY_APOSTROPHE;
-                case Key::Comma:            return ::KEY_COMMA;
-                case Key::Minus:            return ::KEY_MINUS;
-                case Key::Period:           return ::KEY_PERIOD;
-                case Key::Slash:            return ::KEY_SLASH;
-                case Key::Semicolon:        return ::KEY_SEMICOLON;
-                case Key::Equal:            return ::KEY_EQUAL;
-                case Key::LeftBracket:      return ::KEY_LEFT_BRACKET;
-                case Key::Backslash:        return ::KEY_BACKSLASH;
-                case Key::RightBracket:     return ::KEY_RIGHT_BRACKET;
-                case Key::Grave:            return ::KEY_GRAVE;
-
-                // Keypad Keys
-                case Key::Kp0:              return ::KEY_KP_0;
-                case Key::Kp1:              return ::KEY_KP_1;
-                case Key::Kp2:              return ::KEY_KP_2;
-                case Key::Kp3:              return ::KEY_KP_3;
-                case Key::Kp4:              return ::KEY_KP_4;
-                case Key::Kp5:              return ::KEY_KP_5;
-                case Key::Kp6:              return ::KEY_KP_6;
-                case Key::Kp7:              return ::KEY_KP_7;
-                case Key::Kp8:              return ::KEY_KP_8;
-                case Key::Kp9:              return ::KEY_KP_9;
-                case Key::KpDecimal:        return ::KEY_KP_DECIMAL;
-                case Key::KpDivide:         return ::KEY_KP_DIVIDE;
-                case Key::KpMultiply:       return ::KEY_KP_MULTIPLY;
-                case Key::KpSubtract:       return ::KEY_KP_SUBTRACT;
-                case Key::KpAdd:            return ::KEY_KP_ADD;
-                case Key::KpEnter:          return ::KEY_KP_ENTER;
-                case Key::KpEqual:          return ::KEY_KP_EQUAL;
-
-                default:                    return ::KEY_NULL;
-            }
-        }
-
-        inline constexpr Key TrackedKeys[] = {
-            // Control & Whitespace
-            Key::Space,
-            Key::Escape,
-            Key::Enter,
-            Key::Tab,
-            Key::Backspace,
-            Key::Insert,
-            Key::Delete,
-
-            // Navigation
-            Key::Right,
-            Key::Left,
-            Key::Down,
-            Key::Up,
-            Key::PageUp,
-            Key::PageDown,
-            Key::Home,
-            Key::End,
-
-            // Locks
-            Key::CapsLock,
-            Key::ScrollLock,
-            Key::NumLock,
-            Key::PrintScreen,
-            Key::Pause,
-
-            // Number Keys
-            Key::Zero,
-            Key::One,
-            Key::Two,
-            Key::Three,
-            Key::Four,
-            Key::Five,
-            Key::Six,
-            Key::Seven,
-            Key::Eight,
-            Key::Nine,
-
-            // Alphabet Keys
-            Key::A,
-            Key::B,
-            Key::C,
-            Key::D,
-            Key::E,
-            Key::F,
-            Key::G,
-            Key::H,
-            Key::I,
-            Key::J,
-            Key::K,
-            Key::L,
-            Key::M,
-            Key::N,
-            Key::O,
-            Key::P,
-            Key::Q,
-            Key::R,
-            Key::S,
-            Key::T,
-            Key::U,
-            Key::V,
-            Key::W,
-            Key::X,
-            Key::Y,
-            Key::Z,
-
-            // Function Keys
-            Key::F1,
-            Key::F2,
-            Key::F3,
-            Key::F4,
-            Key::F5,
-            Key::F6,
-            Key::F7,
-            Key::F8,
-            Key::F9,
-            Key::F10,
-            Key::F11,
-            Key::F12,
-
-            // Modifiers
-            Key::LeftShift,
-            Key::LeftControl,
-            Key::LeftAlt,
-            Key::LeftSuper,
-            Key::RightShift,
-            Key::RightControl,
-            Key::RightAlt,
-            Key::RightSuper,
-            Key::Menu,
-
-            // Punctuation & Symbols
-            Key::Apostrophe,
-            Key::Comma,
-            Key::Minus,
-            Key::Period,
-            Key::Slash,
-            Key::Semicolon,
-            Key::Equal,
-            Key::LeftBracket,
-            Key::Backslash,
-            Key::RightBracket,
-            Key::Grave,
-
-            // Keypad Keys
-            Key::Kp0,
-            Key::Kp1,
-            Key::Kp2,
-            Key::Kp3,
-            Key::Kp4,
-            Key::Kp5,
-            Key::Kp6,
-            Key::Kp7,
-            Key::Kp8,
-            Key::Kp9,
-            Key::KpDecimal,
-            Key::KpDivide,
-            Key::KpMultiply,
-            Key::KpSubtract,
-            Key::KpAdd,
-            Key::KpEnter,
-            Key::KpEqual
+        struct KeyBinding {
+            Key hoorayKey;
+            int raylibKey;
         };
+
+        // Pre-paired key mappings: evaluated at compile-time, zero switch overhead
+        inline constexpr KeyBinding TrackedKeyBindings[] = {
+            { Key::Space, ::KEY_SPACE },
+            { Key::Escape, ::KEY_ESCAPE },
+            { Key::Enter, ::KEY_ENTER },
+            { Key::Tab, ::KEY_TAB },
+            { Key::Backspace, ::KEY_BACKSPACE },
+            { Key::Insert, ::KEY_INSERT },
+            { Key::Delete, ::KEY_DELETE },
+
+            { Key::Right, ::KEY_RIGHT },
+            { Key::Left, ::KEY_LEFT },
+            { Key::Down, ::KEY_DOWN },
+            { Key::Up, ::KEY_UP },
+            { Key::PageUp, ::KEY_PAGE_UP },
+            { Key::PageDown, ::KEY_PAGE_DOWN },
+            { Key::Home, ::KEY_HOME },
+            { Key::End, ::KEY_END },
+
+            { Key::CapsLock, ::KEY_CAPS_LOCK },
+            { Key::ScrollLock, ::KEY_SCROLL_LOCK },
+            { Key::NumLock, ::KEY_NUM_LOCK },
+            { Key::PrintScreen, ::KEY_PRINT_SCREEN },
+            { Key::Pause, ::KEY_PAUSE },
+
+            { Key::Zero, ::KEY_ZERO },
+            { Key::One, ::KEY_ONE },
+            { Key::Two, ::KEY_TWO },
+            { Key::Three, ::KEY_THREE },
+            { Key::Four, ::KEY_FOUR },
+            { Key::Five, ::KEY_FIVE },
+            { Key::Six, ::KEY_SIX },
+            { Key::Seven, ::KEY_SEVEN },
+            { Key::Eight, ::KEY_EIGHT },
+            { Key::Nine, ::KEY_NINE },
+
+            { Key::A, ::KEY_A }, { Key::B, ::KEY_B }, { Key::C, ::KEY_C },
+            { Key::D, ::KEY_D }, { Key::E, ::KEY_E }, { Key::F, ::KEY_F },
+            { Key::G, ::KEY_G }, { Key::H, ::KEY_H }, { Key::I, ::KEY_I },
+            { Key::J, ::KEY_J }, { Key::K, ::KEY_K }, { Key::L, ::KEY_L },
+            { Key::M, ::KEY_M }, { Key::N, ::KEY_N }, { Key::O, ::KEY_O },
+            { Key::P, ::KEY_P }, { Key::Q, ::KEY_Q }, { Key::R, ::KEY_R },
+            { Key::S, ::KEY_S }, { Key::T, ::KEY_T }, { Key::U, ::KEY_U },
+            { Key::V, ::KEY_V }, { Key::W, ::KEY_W }, { Key::X, ::KEY_X },
+            { Key::Y, ::KEY_Y }, { Key::Z, ::KEY_Z },
+
+            { Key::F1, ::KEY_F1 },   { Key::F2, ::KEY_F2 },   { Key::F3, ::KEY_F3 },
+            { Key::F4, ::KEY_F4 },   { Key::F5, ::KEY_F5 },   { Key::F6, ::KEY_F6 },
+            { Key::F7, ::KEY_F7 },   { Key::F8, ::KEY_F8 },   { Key::F9, ::KEY_F9 },
+            { Key::F10, ::KEY_F10 }, { Key::F11, ::KEY_F11 }, { Key::F12, ::KEY_F12 },
+
+            { Key::LeftShift, ::KEY_LEFT_SHIFT },     { Key::LeftControl, ::KEY_LEFT_CONTROL },
+            { Key::LeftAlt, ::KEY_LEFT_ALT },         { Key::LeftSuper, ::KEY_LEFT_SUPER },
+            { Key::RightShift, ::KEY_RIGHT_SHIFT },   { Key::RightControl, ::KEY_RIGHT_CONTROL },
+            { Key::RightAlt, ::KEY_RIGHT_ALT },       { Key::RightSuper, ::KEY_RIGHT_SUPER },
+            { Key::Menu, ::KEY_KB_MENU },
+
+            { Key::Apostrophe, ::KEY_APOSTROPHE },    { Key::Comma, ::KEY_COMMA },
+            { Key::Minus, ::KEY_MINUS },              { Key::Period, ::KEY_PERIOD },
+            { Key::Slash, ::KEY_SLASH },              { Key::Semicolon, ::KEY_SEMICOLON },
+            { Key::Equal, ::KEY_EQUAL },              { Key::LeftBracket, ::KEY_LEFT_BRACKET },
+            { Key::Backslash, ::KEY_BACKSLASH },      { Key::RightBracket, ::KEY_RIGHT_BRACKET },
+            { Key::Grave, ::KEY_GRAVE },
+
+            { Key::Kp0, ::KEY_KP_0 }, { Key::Kp1, ::KEY_KP_1 }, { Key::Kp2, ::KEY_KP_2 },
+            { Key::Kp3, ::KEY_KP_3 }, { Key::Kp4, ::KEY_KP_4 }, { Key::Kp5, ::KEY_KP_5 },
+            { Key::Kp6, ::KEY_KP_6 }, { Key::Kp7, ::KEY_KP_7 }, { Key::Kp8, ::KEY_KP_8 },
+            { Key::Kp9, ::KEY_KP_9 },
+            { Key::KpDecimal, ::KEY_KP_DECIMAL },     { Key::KpDivide, ::KEY_KP_DIVIDE },
+            { Key::KpMultiply, ::KEY_KP_MULTIPLY },   { Key::KpSubtract, ::KEY_KP_SUBTRACT },
+            { Key::KpAdd, ::KEY_KP_ADD },             { Key::KpEnter, ::KEY_KP_ENTER },
+            { Key::KpEqual, ::KEY_KP_EQUAL }
+        };
+
+        // Small stack-allocated buffer to store events generated this frame
+        constexpr size_t MaxEventsPerFrame = 32;
 
 #pragma endregion
 
@@ -398,26 +207,33 @@ namespace Hooray {
         while (m_running && !::WindowShouldClose()) {
             const float dt = ::GetFrameTime();
 
-            for (Key key : TrackedKeys) {
-                const int rk = HoorayKeyToRaylib(key);
+            // Gather all key events that actually occurred this frame (Zero allocations)
+            std::array<KeyEvent, MaxEventsPerFrame> frameEvents;
+            size_t eventCount = 0;
 
-                if (::IsKeyPressed(rk)) {
-                    ForEachActiveElement(m_config.scenes, [key](auto& elem) {
-                        ProcessKeyEvent({.key = key, .action = KeyAction::Pressed}, elem);
-                    });
+            for (const auto& binding : TrackedKeyBindings) {
+                if (::IsKeyPressed(binding.raylibKey)) {
+                    if (eventCount < MaxEventsPerFrame)
+                        frameEvents[eventCount++] = { .key = binding.hoorayKey, .action = KeyAction::Pressed };
                 }
+                if (::IsKeyDown(binding.raylibKey)) {
+                    if (eventCount < MaxEventsPerFrame)
+                        frameEvents[eventCount++] = { .key = binding.hoorayKey, .action = KeyAction::Down };
+                }
+                if (::IsKeyReleased(binding.raylibKey)) {
+                    if (eventCount < MaxEventsPerFrame)
+                        frameEvents[eventCount++] = { .key = binding.hoorayKey, .action = KeyAction::Released };
+                }
+            }
 
-                if (::IsKeyDown(rk)) {
-                    ForEachActiveElement(m_config.scenes, [key](auto& elem) {
-                        ProcessKeyEvent({.key = key, .action = KeyAction::Down}, elem);
-                    });
-                }
-
-                if (::IsKeyReleased(rk)) {
-                    ForEachActiveElement(m_config.scenes, [key](auto& elem) {
-                        ProcessKeyEvent({.key = key, .action = KeyAction::Released}, elem);
-                    });
-                }
+            // Dispatch all events in a SINGLE traversal of the scene graph
+            if (eventCount > 0) {
+                const std::span<const KeyEvent> activeEvents(frameEvents.data(), eventCount);
+                ForEachActiveElement(m_config.scenes, [activeEvents](auto& elem) {
+                    for (const auto& ev : activeEvents) {
+                        ProcessKeyEvent(ev, elem);
+                    }
+                });
             }
 
             // Update controllers
