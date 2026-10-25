@@ -1,5 +1,7 @@
 #include <hooray/scenerunner.hpp>
 #include <iostream>
+#include <ranges>
+
 #include "raylib.h"
 #include "rlgl.h"
 
@@ -373,21 +375,17 @@ namespace Hooray {
 
     }
 
-    DeclarativeApp::DeclarativeApp(AppConfig config) : m_config(std::move(config)) {}
+    HoorayApp::HoorayApp(AppConfig config) : m_config(std::move(config)) {}
 
-    DeclarativeApp::~DeclarativeApp() = default;
-
-    void DeclarativeApp::quit() {
-        m_running = false;
-    }
-
-    int DeclarativeApp::run() {
+    int HoorayApp::run() {
         if (m_config.window.resizable) {
             ::SetConfigFlags(FLAG_WINDOW_RESIZABLE);
         }
 
         ::InitWindow(m_config.window.width, m_config.window.height, m_config.window.title.c_str());
         ::SetTargetFPS(m_config.window.targetFps);
+
+        LoadGlobalAssets();
 
         m_running = true;
 
@@ -444,7 +442,6 @@ namespace Hooray {
             ProcessDestroy(lastDt, elem);
         });
 
-        ::CloseWindow();
         return 0;
     }
 
@@ -550,7 +547,7 @@ namespace Hooray {
         ::rlPopMatrix();
     }
 
-    void DeclarativeApp::DrawElement(const VisualElement2D &elem) {
+    void HoorayApp::DrawElement(const VisualElement2D &elem) {
         std::visit([&]<typename T0>(const T0& c) {
             using T = std::decay_t<T0>;
 
@@ -584,22 +581,7 @@ namespace Hooray {
     }
 
     template <typename T>
-    void DeclarativeApp::ProcessInit(T& node) {
-
-        for (auto asset : m_config.assets) {
-            std::visit([&]<typename T0>(T0& item) {
-                using Tx = std::decay_t<T0>;
-
-                if constexpr (std::is_same_v<Tx, TextureAsset>) {
-                    Texture texture(item.path);
-                    m_textureMap.insert_or_assign(item.id, std::move(texture));
-                } else if constexpr (std::is_same_v<Tx, FontAsset>) {
-                    Font font(item.path, item.baseSize);
-                    m_fontMap.insert_or_assign(item.id, std::move(font));
-                }
-            }, asset);
-        }
-
+    void HoorayApp::ProcessInit(T& node) {
         if constexpr (requires { node.controller; }) {
             std::visit([&](auto& ctrl) {
                 using SlotType = std::decay_t<decltype(ctrl)>;
@@ -612,7 +594,7 @@ namespace Hooray {
         }
     }
 
-    void DeclarativeApp::OnDraw() {
+    void HoorayApp::OnDraw() {
         for (auto &scene : m_config.scenes) {
             if (!scene.visible) continue;
             for (const auto& layerVariant : scene.layers) {
@@ -631,6 +613,45 @@ namespace Hooray {
                         }
                     }
                 }, layerVariant);
+            }
+        }
+    }
+
+    void HoorayApp::LoadGlobalAssets() {
+        for (auto asset : m_config.assets) {
+            std::visit([&]<typename T0>(T0& item) {
+                using Tx = std::decay_t<T0>;
+
+                if constexpr (std::is_same_v<Tx, TextureAsset>) {
+                    Texture texture(item.path);
+                    m_textureMap.insert_or_assign(item.id, std::move(texture));
+                } else if constexpr (std::is_same_v<Tx, FontAsset>) {
+                    Font font(item.path, item.baseSize);
+                    m_fontMap.insert_or_assign(item.id, std::move(font));
+                }
+            }, asset);
+        }
+    }
+
+    void HoorayApp::UnloadGlobalAssets() {
+        m_textureMap.clear();
+        m_fontMap.clear();
+    }
+
+    void HoorayApp::quit() {
+        m_running = false;
+    }
+
+    HoorayApp::~HoorayApp() {
+        if (::IsWindowReady()) {
+            UnloadGlobalAssets();
+            ::CloseWindow();
+        } else {
+            for (auto &tex: m_textureMap | std::views::values) {
+                tex = Texture{};
+            }
+            for (auto &font: m_fontMap | std::views::values) {
+                font = Font{};
             }
         }
     }

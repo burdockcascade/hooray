@@ -5,14 +5,14 @@
 
 namespace Hooray {
 
-    class DeclarativeApp final {
+    class HoorayApp final {
     public:
-        explicit DeclarativeApp(AppConfig config = {});
+        explicit HoorayApp(AppConfig config = {});
 
-        ~DeclarativeApp();
+        ~HoorayApp();
 
-        DeclarativeApp(const DeclarativeApp&) = delete;
-        DeclarativeApp& operator=(const DeclarativeApp&) = delete;
+        HoorayApp(const HoorayApp&) = delete;
+        HoorayApp& operator=(const HoorayApp&) = delete;
 
         int run();
 
@@ -22,6 +22,9 @@ namespace Hooray {
         void ProcessInit(T &node);
 
         void OnDraw();
+
+        void LoadGlobalAssets();
+        void UnloadGlobalAssets();
 
         void quit();
 
@@ -33,7 +36,7 @@ namespace Hooray {
     };
 
     inline int RunApp(AppConfig config) {
-        DeclarativeApp app(std::move(config));
+        HoorayApp app(std::move(config));
         return app.run();
     }
 
