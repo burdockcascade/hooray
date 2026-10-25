@@ -16,6 +16,9 @@ namespace Hooray {
 
         int run();
 
+        void ProcessMouseEvents();
+        void ProcessKeyboardEvents();
+
         void DrawElement(const VisualElement2D &elem);
 
         template<class T>

@@ -7,6 +7,22 @@
 
 namespace Hooray {
 
+#pragma region Types
+
+    struct Color {
+        uint8_t r{255};
+        uint8_t g{255};
+        uint8_t b{255};
+        uint8_t a{255};
+    };
+
+    struct Vector2 {
+        float x{0.0f};
+        float y{0.0f};
+    };
+
+#pragma endregion
+
 #pragma region NodeController
 
     enum class KeyAction {
@@ -84,6 +100,33 @@ namespace Hooray {
         KeyAction action{KeyAction::Pressed};
     };
 
+    enum class MouseAction {
+        Pressed,   // Triggered once when first pressed
+        Down,      // Triggered every frame while held down
+        Released,  // Triggered once when released
+        Moved,     // Mouse cursor moved
+        Scrolled   // Mouse wheel scrolled
+    };
+
+    enum class MouseButton {
+        None = -1,
+        Left = 0,
+        Right = 1,
+        Middle = 2,
+        Side = 3,
+        Extra = 4,
+        Forward = 5,
+        Back = 6
+    };
+
+    struct MouseEvent {
+        MouseAction action{MouseAction::Moved};
+        MouseButton button{MouseButton::None};
+        Vector2 position{.x = 0.0f, .y = 0.0f};      // Current screen coordinates
+        Vector2 delta{.x = 0.0f, .y = 0.0f};         // Position movement delta
+        Vector2 scroll{.x = 0.0f, .y = 0.0f};        // Scroll wheel delta (x: h-scroll, y: v-scroll)
+    };
+
     template <typename T>
     struct NodeController {
         virtual ~NodeController() = default;
@@ -94,6 +137,7 @@ namespace Hooray {
         virtual void OnDestroy(float dt, T& node) { };
 
         virtual void OnKeyEvent(const KeyEvent& event, T& node) {}
+        virtual void OnMouseEvent(const MouseEvent& event, T& node) {}
 
     };
 
@@ -103,6 +147,7 @@ namespace Hooray {
         std::function<void(float dt, T& node)> onUpdate{nullptr};
         std::function<void(T& node)> onDestroy{nullptr};
         std::function<void(const KeyEvent& event, T& node)> onKeyEvent{nullptr};
+        std::function<void(const MouseEvent& event, T& node)> onMouseEvent{nullptr};
     };
 
     template <typename T>
@@ -111,22 +156,6 @@ namespace Hooray {
         NodeCallbacks<T>,                       // lightweight callbacks
         std::shared_ptr<NodeController<T>>      // class-based controller
     >;
-
-#pragma endregion
-
-#pragma region Types
-
-    struct Color {
-        uint8_t r{255};
-        uint8_t g{255};
-        uint8_t b{255};
-        uint8_t a{255};
-    };
-
-    struct Vector2 {
-        float x{0.0f};
-        float y{0.0f};
-    };
 
 #pragma endregion
 

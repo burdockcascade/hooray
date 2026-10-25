@@ -10,6 +10,25 @@ namespace Hooray {
 
     namespace {
 
+#pragma region Mouse
+
+        struct MouseBinding {
+            MouseButton hoorayButton;
+            int raylibButton;
+        };
+
+        inline constexpr MouseBinding TrackedMouseBindings[] = {
+            { MouseButton::Left,    ::MOUSE_BUTTON_LEFT },
+            { MouseButton::Right,   ::MOUSE_BUTTON_RIGHT },
+            { MouseButton::Middle,  ::MOUSE_BUTTON_MIDDLE },
+            { MouseButton::Side,    ::MOUSE_BUTTON_SIDE },
+            { MouseButton::Extra,   ::MOUSE_BUTTON_EXTRA },
+            { MouseButton::Forward, ::MOUSE_BUTTON_FORWARD },
+            { MouseButton::Back,    ::MOUSE_BUTTON_BACK }
+        };
+
+#pragma endregion
+
 #pragma region Keyboard
 
         struct KeyBinding {
@@ -53,46 +72,89 @@ namespace Hooray {
             { Key::Eight, ::KEY_EIGHT },
             { Key::Nine, ::KEY_NINE },
 
-            { Key::A, ::KEY_A }, { Key::B, ::KEY_B }, { Key::C, ::KEY_C },
-            { Key::D, ::KEY_D }, { Key::E, ::KEY_E }, { Key::F, ::KEY_F },
-            { Key::G, ::KEY_G }, { Key::H, ::KEY_H }, { Key::I, ::KEY_I },
-            { Key::J, ::KEY_J }, { Key::K, ::KEY_K }, { Key::L, ::KEY_L },
-            { Key::M, ::KEY_M }, { Key::N, ::KEY_N }, { Key::O, ::KEY_O },
-            { Key::P, ::KEY_P }, { Key::Q, ::KEY_Q }, { Key::R, ::KEY_R },
-            { Key::S, ::KEY_S }, { Key::T, ::KEY_T }, { Key::U, ::KEY_U },
-            { Key::V, ::KEY_V }, { Key::W, ::KEY_W }, { Key::X, ::KEY_X },
-            { Key::Y, ::KEY_Y }, { Key::Z, ::KEY_Z },
+            { Key::A, ::KEY_A },
+            { Key::B, ::KEY_B },
+            { Key::C, ::KEY_C },
+            { Key::D, ::KEY_D },
+            { Key::E, ::KEY_E },
+            { Key::F, ::KEY_F },
+            { Key::G, ::KEY_G },
+            { Key::H, ::KEY_H },
+            { Key::I, ::KEY_I },
+            { Key::J, ::KEY_J },
+            { Key::K, ::KEY_K },
+            { Key::L, ::KEY_L },
+            { Key::M, ::KEY_M },
+            { Key::N, ::KEY_N },
+            { Key::O, ::KEY_O },
+            { Key::P, ::KEY_P },
+            { Key::Q, ::KEY_Q },
+            { Key::R, ::KEY_R },
+            { Key::S, ::KEY_S },
+            { Key::T, ::KEY_T },
+            { Key::U, ::KEY_U },
+            { Key::V, ::KEY_V },
+            { Key::W, ::KEY_W },
+            { Key::X, ::KEY_X },
+            { Key::Y, ::KEY_Y },
+            { Key::Z, ::KEY_Z },
 
-            { Key::F1, ::KEY_F1 },   { Key::F2, ::KEY_F2 },   { Key::F3, ::KEY_F3 },
-            { Key::F4, ::KEY_F4 },   { Key::F5, ::KEY_F5 },   { Key::F6, ::KEY_F6 },
-            { Key::F7, ::KEY_F7 },   { Key::F8, ::KEY_F8 },   { Key::F9, ::KEY_F9 },
-            { Key::F10, ::KEY_F10 }, { Key::F11, ::KEY_F11 }, { Key::F12, ::KEY_F12 },
+            { Key::F1, ::KEY_F1 },
+            { Key::F2, ::KEY_F2 },
+            { Key::F3, ::KEY_F3 },
+            { Key::F4, ::KEY_F4 },
+            { Key::F5, ::KEY_F5 },
+            { Key::F6, ::KEY_F6 },
+            { Key::F7, ::KEY_F7 },
+            { Key::F8, ::KEY_F8 },
+            { Key::F9, ::KEY_F9 },
+            { Key::F10, ::KEY_F10 },
+            { Key::F11, ::KEY_F11 },
+            { Key::F12, ::KEY_F12 },
 
-            { Key::LeftShift, ::KEY_LEFT_SHIFT },     { Key::LeftControl, ::KEY_LEFT_CONTROL },
-            { Key::LeftAlt, ::KEY_LEFT_ALT },         { Key::LeftSuper, ::KEY_LEFT_SUPER },
-            { Key::RightShift, ::KEY_RIGHT_SHIFT },   { Key::RightControl, ::KEY_RIGHT_CONTROL },
-            { Key::RightAlt, ::KEY_RIGHT_ALT },       { Key::RightSuper, ::KEY_RIGHT_SUPER },
+            { Key::LeftShift, ::KEY_LEFT_SHIFT },
+            { Key::LeftControl, ::KEY_LEFT_CONTROL },
+            { Key::LeftAlt, ::KEY_LEFT_ALT },
+            { Key::LeftSuper, ::KEY_LEFT_SUPER },
+            { Key::RightShift, ::KEY_RIGHT_SHIFT },
+            { Key::RightControl, ::KEY_RIGHT_CONTROL },
+            { Key::RightAlt, ::KEY_RIGHT_ALT },
+            { Key::RightSuper, ::KEY_RIGHT_SUPER },
             { Key::Menu, ::KEY_KB_MENU },
 
-            { Key::Apostrophe, ::KEY_APOSTROPHE },    { Key::Comma, ::KEY_COMMA },
-            { Key::Minus, ::KEY_MINUS },              { Key::Period, ::KEY_PERIOD },
-            { Key::Slash, ::KEY_SLASH },              { Key::Semicolon, ::KEY_SEMICOLON },
-            { Key::Equal, ::KEY_EQUAL },              { Key::LeftBracket, ::KEY_LEFT_BRACKET },
-            { Key::Backslash, ::KEY_BACKSLASH },      { Key::RightBracket, ::KEY_RIGHT_BRACKET },
+            { Key::Apostrophe, ::KEY_APOSTROPHE },
+            { Key::Comma, ::KEY_COMMA },
+            { Key::Minus, ::KEY_MINUS },
+            { Key::Period, ::KEY_PERIOD },
+            { Key::Slash, ::KEY_SLASH },
+            { Key::Semicolon, ::KEY_SEMICOLON },
+            { Key::Equal, ::KEY_EQUAL },
+            { Key::LeftBracket, ::KEY_LEFT_BRACKET },
+            { Key::Backslash, ::KEY_BACKSLASH },
+            { Key::RightBracket, ::KEY_RIGHT_BRACKET },
             { Key::Grave, ::KEY_GRAVE },
 
-            { Key::Kp0, ::KEY_KP_0 }, { Key::Kp1, ::KEY_KP_1 }, { Key::Kp2, ::KEY_KP_2 },
-            { Key::Kp3, ::KEY_KP_3 }, { Key::Kp4, ::KEY_KP_4 }, { Key::Kp5, ::KEY_KP_5 },
-            { Key::Kp6, ::KEY_KP_6 }, { Key::Kp7, ::KEY_KP_7 }, { Key::Kp8, ::KEY_KP_8 },
+            { Key::Kp0, ::KEY_KP_0 },
+            { Key::Kp1, ::KEY_KP_1 },
+            { Key::Kp2, ::KEY_KP_2 },
+            { Key::Kp3, ::KEY_KP_3 },
+            { Key::Kp4, ::KEY_KP_4 },
+            { Key::Kp5, ::KEY_KP_5 },
+            { Key::Kp6, ::KEY_KP_6 },
+            { Key::Kp7, ::KEY_KP_7 },
+            { Key::Kp8, ::KEY_KP_8 },
             { Key::Kp9, ::KEY_KP_9 },
-            { Key::KpDecimal, ::KEY_KP_DECIMAL },     { Key::KpDivide, ::KEY_KP_DIVIDE },
-            { Key::KpMultiply, ::KEY_KP_MULTIPLY },   { Key::KpSubtract, ::KEY_KP_SUBTRACT },
-            { Key::KpAdd, ::KEY_KP_ADD },             { Key::KpEnter, ::KEY_KP_ENTER },
+            { Key::KpDecimal, ::KEY_KP_DECIMAL },
+            { Key::KpDivide, ::KEY_KP_DIVIDE },
+            { Key::KpMultiply, ::KEY_KP_MULTIPLY },
+            { Key::KpSubtract, ::KEY_KP_SUBTRACT },
+            { Key::KpAdd, ::KEY_KP_ADD },
+            { Key::KpEnter, ::KEY_KP_ENTER },
             { Key::KpEqual, ::KEY_KP_EQUAL }
         };
 
         // Small stack-allocated buffer to store events generated this frame
-        constexpr size_t MaxEventsPerFrame = 32;
+        constexpr size_t MaxEventsPerFrame = 64;
 
 #pragma endregion
 
@@ -182,6 +244,20 @@ namespace Hooray {
             }
         }
 
+        template <typename T>
+        void ProcessMouseEvent(const MouseEvent& event, T& node) {
+            if constexpr (requires { node.controller; }) {
+                std::visit([&](auto& ctrl) {
+                    using SlotType = std::decay_t<decltype(ctrl)>;
+                    if constexpr (std::is_same_v<SlotType, NodeCallbacks<T>>) {
+                        if (ctrl.onMouseEvent) ctrl.onMouseEvent(event, node);
+                    } else if constexpr (std::is_same_v<SlotType, std::shared_ptr<NodeController<T>>>) {
+                        if (ctrl) ctrl->OnMouseEvent(event, node);
+                    }
+                }, node.controller);
+            }
+        }
+
     }
 
     HoorayApp::HoorayApp(AppConfig config) : m_config(std::move(config)) {}
@@ -207,34 +283,8 @@ namespace Hooray {
         while (m_running && !::WindowShouldClose()) {
             const float dt = ::GetFrameTime();
 
-            // Gather all key events that actually occurred this frame (Zero allocations)
-            std::array<KeyEvent, MaxEventsPerFrame> frameEvents;
-            size_t eventCount = 0;
-
-            for (const auto& binding : TrackedKeyBindings) {
-                if (::IsKeyPressed(binding.raylibKey)) {
-                    if (eventCount < MaxEventsPerFrame)
-                        frameEvents[eventCount++] = { .key = binding.hoorayKey, .action = KeyAction::Pressed };
-                }
-                if (::IsKeyDown(binding.raylibKey)) {
-                    if (eventCount < MaxEventsPerFrame)
-                        frameEvents[eventCount++] = { .key = binding.hoorayKey, .action = KeyAction::Down };
-                }
-                if (::IsKeyReleased(binding.raylibKey)) {
-                    if (eventCount < MaxEventsPerFrame)
-                        frameEvents[eventCount++] = { .key = binding.hoorayKey, .action = KeyAction::Released };
-                }
-            }
-
-            // Dispatch all events in a SINGLE traversal of the scene graph
-            if (eventCount > 0) {
-                const std::span<const KeyEvent> activeEvents(frameEvents.data(), eventCount);
-                ForEachActiveElement(m_config.scenes, [activeEvents](auto& elem) {
-                    for (const auto& ev : activeEvents) {
-                        ProcessKeyEvent(ev, elem);
-                    }
-                });
-            }
+            ProcessMouseEvents();
+            ProcessKeyboardEvents();
 
             // Update controllers
             ForEachActiveElement(m_config.scenes, [dt](auto& elem) {
@@ -259,6 +309,115 @@ namespace Hooray {
         });
 
         return 0;
+    }
+
+    void HoorayApp::ProcessMouseEvents() {
+
+        std::array<MouseEvent, MaxEventsPerFrame> mouseEvents;
+        size_t eventCount = 0;
+
+        const ::Vector2 rayMousePos = ::GetMousePosition();
+        const ::Vector2 rayMouseDelta = ::GetMouseDelta();
+        const ::Vector2 rayMouseWheel = ::GetMouseWheelMoveV();
+
+        const Vector2 mousePos{.x = rayMousePos.x, .y = rayMousePos.y};
+        const Vector2 mouseDelta{.x = rayMouseDelta.x, .y = rayMouseDelta.y};
+        const Vector2 mouseWheel{.x = rayMouseWheel.x, .y = rayMouseWheel.y};
+
+        // Mouse button states
+        for (const auto& binding : TrackedMouseBindings) {
+            if (::IsMouseButtonPressed(binding.raylibButton) && eventCount < MaxEventsPerFrame) {
+                mouseEvents[eventCount++] = {
+                    .action = MouseAction::Pressed,
+                    .button = binding.hoorayButton,
+                    .position = mousePos,
+                    .delta = mouseDelta
+                };
+            }
+            if (::IsMouseButtonDown(binding.raylibButton) && eventCount < MaxEventsPerFrame) {
+                mouseEvents[eventCount++] = {
+                    .action = MouseAction::Down,
+                    .button = binding.hoorayButton,
+                    .position = mousePos,
+                    .delta = mouseDelta
+                };
+            }
+            if (::IsMouseButtonReleased(binding.raylibButton) && eventCount < MaxEventsPerFrame) {
+                mouseEvents[eventCount++] = {
+                    .action = MouseAction::Released,
+                    .button = binding.hoorayButton,
+                    .position = mousePos,
+                    .delta = mouseDelta
+                };
+            }
+        }
+
+        // Cursor movement
+        if ((mouseDelta.x != 0.0f || mouseDelta.y != 0.0f) && eventCount < MaxEventsPerFrame) {
+            mouseEvents[eventCount++] = {
+                .action = MouseAction::Moved,
+                .button = MouseButton::None,
+                .position = mousePos,
+                .delta = mouseDelta
+            };
+        }
+
+        // Wheel scroll
+        if ((mouseWheel.x != 0.0f || mouseWheel.y != 0.0f) && eventCount < MaxEventsPerFrame) {
+            mouseEvents[eventCount++] = {
+                .action = MouseAction::Scrolled,
+                .button = MouseButton::None,
+                .position = mousePos,
+                .delta = mouseDelta,
+                .scroll = mouseWheel
+            };
+        }
+
+        // 4. Dispatch Mouse Events
+        if (eventCount > 0) {
+            const std::span<const MouseEvent> activeMouseEvents(mouseEvents.data(), eventCount);
+            ForEachActiveElement(m_config.scenes, [activeMouseEvents](auto& elem) {
+                for (const auto& ev : activeMouseEvents) {
+                    ProcessMouseEvent(ev, elem);
+                }
+            });
+        }
+
+    }
+
+    void HoorayApp::ProcessKeyboardEvents() {
+
+        // Gather all key events that actually occurred this frame (Zero allocations)
+        std::array<KeyEvent, MaxEventsPerFrame> frameEvents;
+        size_t eventCount = 0;
+
+        for (const auto& binding : TrackedKeyBindings) {
+            if (::IsKeyPressed(binding.raylibKey)) {
+                if (eventCount < MaxEventsPerFrame) {
+                    frameEvents[eventCount++] = { .key = binding.hoorayKey, .action = KeyAction::Pressed };
+                }
+            }
+            if (::IsKeyDown(binding.raylibKey)) {
+                if (eventCount < MaxEventsPerFrame) {
+                    frameEvents[eventCount++] = { .key = binding.hoorayKey, .action = KeyAction::Down };
+                }
+            }
+            if (::IsKeyReleased(binding.raylibKey)) {
+                if (eventCount < MaxEventsPerFrame) {
+                    frameEvents[eventCount++] = { .key = binding.hoorayKey, .action = KeyAction::Released };
+                }
+            }
+        }
+
+        if (eventCount > 0) {
+            const std::span<const KeyEvent> activeEvents(frameEvents.data(), eventCount);
+            ForEachActiveElement(m_config.scenes, [activeEvents](auto& elem) {
+                for (const auto& ev : activeEvents) {
+                    ProcessKeyEvent(ev, elem);
+                }
+            });
+        }
+
     }
 
     static void DrawRectElement(const RectangleShape &elem) {
