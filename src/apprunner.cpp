@@ -263,7 +263,8 @@ namespace Hooray {
     HoorayApp::HoorayApp(AppConfig config) : m_config(std::move(config)) {}
 
     int HoorayApp::run() {
-        if (m_config.window.resizable) {
+
+        if (m_config.window.flags.resizable) {
             ::SetConfigFlags(FLAG_WINDOW_RESIZABLE);
         }
 
@@ -294,7 +295,7 @@ namespace Hooray {
             ::BeginDrawing();
             ::ClearBackground(ToRaylibColor(m_config.window.bgColor));
 
-            if (m_config.window.showFPS) {
+            if (m_config.window.flags.showFPS) {
                 ::DrawFPS(10, 10);
             }
 

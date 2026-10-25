@@ -6,6 +6,12 @@ int main() {
             .title = "Hooray Demo",
             .width = 800,
             .height = 600,
+            .flags = {
+                .resizable = true,
+                .fullscreen = false,
+                .vsync = true,
+                .showFPS = true
+            },
             .targetFps = 60
         },
         .assets = {

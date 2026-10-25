@@ -493,14 +493,20 @@ namespace Hooray {
 
 #pragma region Window
 
+    struct WindowFlags {
+        bool resizable{false};
+        bool fullscreen{false};
+        bool vsync{true};
+        bool showFPS{false};
+    };
+
     struct WindowConfig {
         std::string title = "Hooray App";
         int width = 1280;
         int height = 720;
         Color bgColor{Colors::White};
+        WindowFlags flags{};
         int targetFps = 60;
-        bool resizable = false;
-        bool showFPS = false;
     };
 
     struct AppConfig {
