@@ -16,6 +16,8 @@ namespace Hooray {
 
         int Run();
 
+        void ProcessWindowFlags();
+
         void ProcessMouseEvents();
         void ProcessKeyboardEvents();
         void ProcessGamepadEvents();

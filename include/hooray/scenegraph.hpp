@@ -497,7 +497,6 @@ namespace Hooray {
         bool resizable{false};
         bool fullscreen{false};
         bool vsync{true};
-        bool showFPS{false};
     };
 
     struct WindowConfig {
@@ -507,6 +506,7 @@ namespace Hooray {
         Color bgColor{Colors::White};
         WindowFlags flags{};
         int targetFps = 60;
+        bool showFPS{false};
     };
 
     struct AppConfig {

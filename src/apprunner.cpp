@@ -264,9 +264,7 @@ namespace Hooray {
 
     int HoorayApp::Run() {
 
-        if (m_config.window.flags.resizable) {
-            ::SetConfigFlags(FLAG_WINDOW_RESIZABLE);
-        }
+        ProcessWindowFlags();
 
         ::InitWindow(m_config.window.width, m_config.window.height, m_config.window.title.c_str());
         ::SetTargetFPS(m_config.window.targetFps);
@@ -308,6 +306,14 @@ namespace Hooray {
         });
 
         return 0;
+    }
+
+    void HoorayApp::ProcessWindowFlags() {
+        int flags = 0;
+        if (m_config.window.flags.resizable) flags |= FLAG_WINDOW_RESIZABLE;
+        if (m_config.window.flags.fullscreen) flags |= FLAG_FULLSCREEN_MODE;
+        if (m_config.window.flags.vsync) flags |= FLAG_VSYNC_HINT;
+        ::SetConfigFlags(flags);
     }
 
     void HoorayApp::ProcessMouseEvents() {
@@ -598,7 +604,7 @@ namespace Hooray {
             }
         }
 
-        if (m_config.window.flags.showFPS) {
+        if (m_config.window.showFPS) {
             ::DrawFPS(10, 10);
         }
     }

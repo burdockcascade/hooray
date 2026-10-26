@@ -10,9 +10,9 @@ int main() {
                 .resizable = true,
                 .fullscreen = false,
                 .vsync = true,
-                .showFPS = true
             },
-            .targetFps = 60
+            .targetFps = 60,
+            .showFPS = true
         },
         .assets = {
             Hooray::FontAsset{
