@@ -62,7 +62,9 @@ int main() {
                                         .transform = {
                                             .position = {.x = 60.0f, .y = 40.0f},
                                         },
-                                        .size = 100.0f,
+                                        .p1 = {.x = 0.0f, .y = -50.0f},
+                                        .p2 = {.x = -50.0f, .y = 50.0f},
+                                        .p3 = {.x = 50.0f, .y = 50.0f},
                                         .fillColor = Hooray::Colors::Blue,
                                     },
                                 },

@@ -463,9 +463,9 @@ namespace Hooray {
         ::rlRotatef(elem.transform.rotation, 0.0f, 0.0f, 1.0f);
         ::rlScalef(elem.transform.scale.x, elem.transform.scale.y, 1.0f);
 
-        const ::Vector2 v1 = {.x = 0.0f, .y = 0.0f};
-        const ::Vector2 v2 = {.x = -elem.size / 2.0f, .y = elem.size};
-        const ::Vector2 v3 = {.x = elem.size / 2.0f, .y = elem.size};
+        const ::Vector2 v1 = ToRaylibVector2(elem.p1);
+        const ::Vector2 v2 = ToRaylibVector2(elem.p2);
+        const ::Vector2 v3 = ToRaylibVector2(elem.p3);
 
         ::DrawTriangle(v1, v2, v3, ToRaylibColor(elem.fillColor));
         ::rlPopMatrix();

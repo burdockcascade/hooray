@@ -42,4 +42,8 @@ namespace Hooray {
         };
     }
 
+    inline ::Vector2 ToRaylibVector2(const Vector2& vec) noexcept {
+        return ::Vector2{.x = vec.x, .y = vec.y};
+    }
+
 }
