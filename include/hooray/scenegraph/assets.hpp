@@ -4,6 +4,8 @@
 
 namespace Hooray {
 
+#pragma region Texture
+
     struct TextureHandle {
         uint32_t id{0};
         int width{0};
@@ -39,6 +41,15 @@ namespace Hooray {
     private:
         TextureHandle handle_{};
     };
+
+    struct TextureAsset {
+        std::string id;
+        std::filesystem::path path;
+    };
+
+#pragma endregion
+
+#pragma region Font
 
     struct FontHandle {
         int baseSize{0};
@@ -76,16 +87,13 @@ namespace Hooray {
         FontHandle handle_{};
     };
 
-    struct TextureAsset {
-        std::string id;
-        std::filesystem::path path;
-    };
-
     struct FontAsset {
         std::string id;
         std::filesystem::path path;
         int baseSize{32};
     };
+
+#pragma endregion
 
     using Asset = std::variant<TextureAsset, FontAsset>;
 
