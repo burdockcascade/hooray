@@ -37,11 +37,24 @@ namespace Hooray {
         bool visible{true};
     };
 
+    struct MusicStream {
+        std::string audio_id;
+        bool looping{true};
+        float volume{1.0f};
+    };
+
+    struct AudioStream {
+        std::string audio_id;
+        bool looping{true};
+        float volume{1.0f};
+    };
+
     using Layer = std::variant<LayerUI, Layer2D, Layer3D>;
 
     struct Scene {
         bool active{true};
         bool visible{true};
+        std::vector<MusicStream> music{};
         std::vector<Layer> layers{};
     };
 

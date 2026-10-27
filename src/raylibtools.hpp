@@ -46,4 +46,34 @@ namespace Hooray {
         return ::Vector2{.x = vec.x, .y = vec.y};
     }
 
+    // Conversion helpers to raylib types
+    inline auto ToRaylibSound(const SoundHandle& h) noexcept -> ::Sound {
+        return ::Sound{
+            .stream = {
+                .buffer = static_cast<rAudioBuffer*>(h.stream.buffer),
+                .processor = static_cast<rAudioProcessor*>(h.stream.processor),
+                .sampleRate = h.stream.sampleRate,
+                .sampleSize = h.stream.sampleSize,
+                .channels = h.stream.channels
+            },
+            .frameCount = h.frameCount
+        };
+    }
+
+    inline auto ToRaylibMusic(const MusicHandle& h) noexcept -> ::Music {
+        return ::Music{
+            .stream = {
+                .buffer = static_cast<rAudioBuffer*>(h.stream.buffer),
+                .processor = static_cast<rAudioProcessor*>(h.stream.processor),
+                .sampleRate = h.stream.sampleRate,
+                .sampleSize = h.stream.sampleSize,
+                .channels = h.stream.channels
+            },
+            .frameCount = h.frameCount,
+            .looping = h.looping,
+            .ctxType = h.ctxType,
+            .ctxData = h.ctxData
+        };
+    }
+
 }

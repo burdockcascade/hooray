@@ -1,5 +1,7 @@
 #pragma once
 #include <filesystem>
+#include <string>
+#include <utility>
 #include <variant>
 
 namespace Hooray {
@@ -21,7 +23,6 @@ namespace Hooray {
 
         ~Texture() noexcept;
 
-        // Move-only semantics
         Texture(const Texture&) = delete;
         auto operator=(const Texture&) -> Texture& = delete;
 
@@ -95,6 +96,113 @@ namespace Hooray {
 
 #pragma endregion
 
-    using Asset = std::variant<TextureAsset, FontAsset>;
+#pragma region Audio Handles & Common Types
+
+    // Matches raylib's AudioStream layout:
+    // rAudioBuffer* buffer, rAudioProcessor* processor, sampleRate, sampleSize, channels
+    struct AudioStreamHandle {
+        void* buffer{nullptr};
+        void* processor{nullptr};
+        uint32_t sampleRate{0};
+        uint32_t sampleSize{0};
+        uint32_t channels{0};
+    };
+
+#pragma endregion
+
+#pragma region Sound
+
+    // Matches raylib's Sound: AudioStream stream, unsigned int frameCount
+    struct SoundHandle {
+        AudioStreamHandle stream{};
+        uint32_t frameCount{0};
+    };
+
+    class Sound {
+    public:
+        explicit Sound(const std::filesystem::path& path) noexcept;
+
+        explicit constexpr Sound(SoundHandle handle = {}) noexcept : handle_{handle} {}
+
+        ~Sound() noexcept;
+
+        Sound(const Sound&) = delete;
+        auto operator=(const Sound&) -> Sound& = delete;
+
+        constexpr Sound(Sound&& other) noexcept
+            : handle_{std::exchange(other.handle_, SoundHandle{})} {}
+
+        auto operator=(Sound&& other) noexcept -> Sound&;
+
+        [[nodiscard]] constexpr auto is_valid() const noexcept -> bool {
+            return handle_.stream.buffer != nullptr;
+        }
+
+        [[nodiscard]] constexpr auto handle() const noexcept -> const SoundHandle& {
+            return handle_;
+        }
+
+    private:
+        SoundHandle handle_{};
+    };
+
+    struct SoundAsset {
+        std::string id;
+        std::filesystem::path path;
+    };
+
+#pragma endregion
+
+#pragma region Music
+
+    // Matches raylib's Music: AudioStream stream, frameCount, looping, ctxType, ctxData
+    struct MusicHandle {
+        AudioStreamHandle stream{};
+        uint32_t frameCount{0};
+        bool looping{true};
+        int ctxType{0};
+        void* ctxData{nullptr};
+    };
+
+    class Music {
+    public:
+        explicit Music(const std::filesystem::path& path) noexcept;
+
+        void Play() const noexcept;
+
+        void Update() const noexcept;
+
+        explicit constexpr Music(MusicHandle handle = {}) noexcept : handle_{handle} {}
+
+        ~Music() noexcept;
+
+        Music(const Music&) = delete;
+        auto operator=(const Music&) -> Music& = delete;
+
+        constexpr Music(Music&& other) noexcept
+            : handle_{std::exchange(other.handle_, MusicHandle{})} {}
+
+        auto operator=(Music&& other) noexcept -> Music&;
+
+        [[nodiscard]] constexpr auto is_valid() const noexcept -> bool {
+            return handle_.ctxData != nullptr;
+        }
+
+        [[nodiscard]] constexpr auto handle() const noexcept -> const MusicHandle& {
+            return handle_;
+        }
+
+    private:
+        MusicHandle handle_{};
+    };
+
+    struct MusicAsset {
+        std::string id;
+        std::filesystem::path path;
+    };
+
+#pragma endregion
+
+    using Asset = std::variant<TextureAsset, FontAsset, SoundAsset, MusicAsset>;
 
 }

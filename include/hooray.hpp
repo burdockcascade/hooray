@@ -1,4 +1,4 @@
 #pragma once
 
-#include <hooray/scenegraph.hpp>
+#include <hooray/font.hpp>
 #include <hooray/apprunner.hpp>

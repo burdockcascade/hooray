@@ -19,10 +19,25 @@ int main() {
                 .id = "font1",
                 .path = R"(..\..\examples\assets\Roboto-Regular.ttf)",
                 .baseSize = 64
+            },
+            Hooray::MusicAsset{
+                .id = "music1",
+                .path = R"(..\..\examples\assets\music1.mp3)"
+            },
+            Hooray::MusicAsset{
+                .id = "music2",
+                .path = R"(..\..\examples\assets\music2.mp3)"
             }
         },
         .scenes = {
             Hooray::Scene {
+                .music = {
+                    Hooray::MusicStream {
+                        .audio_id = "music2",
+                        .looping = true,
+                        .volume = 0.5f
+                    }
+                },
                 .layers = {
                     Hooray::Layer2D {
                         .camera = {

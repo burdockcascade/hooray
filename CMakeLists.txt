@@ -22,8 +22,8 @@ add_compile_definitions(SUPPORT_FILEFORMAT_JPG)
 FetchContent_MakeAvailable(raylib)
 
 add_library(hooray STATIC
+        src/scenegraph/assets.cpp
         src/apprunner.cpp
-        src/scenegraph.cpp
 )
 
 target_include_directories(hooray PUBLIC

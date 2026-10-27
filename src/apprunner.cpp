@@ -278,9 +278,13 @@ namespace Hooray {
             ProcessInit(elem);
         });
 
+        InitMusicStreams();
+
         // Main Game Loop
         while (m_running && !::WindowShouldClose()) {
             const float dt = ::GetFrameTime();
+
+            UpdateMusicStreams();
 
             ProcessMouseEvents();
             ProcessKeyboardEvents();
@@ -306,6 +310,28 @@ namespace Hooray {
         });
 
         return 0;
+    }
+
+    void HoorayApp::InitMusicStreams() {
+        for (auto& scene : m_config.scenes) {
+            if (!scene.active) continue;
+            for (const auto& musicStream : scene.music) {
+                if (auto it = m_musicMap.find(musicStream.audio_id); it != m_musicMap.end()) {
+                    it->second.Play();
+                }
+            }
+        }
+    }
+
+    void HoorayApp::UpdateMusicStreams() {
+        for (auto& scene : m_config.scenes) {
+            if (!scene.active) continue;
+            for (const auto& musicStream : scene.music) {
+                if (auto it = m_musicMap.find(musicStream.audio_id); it != m_musicMap.end()) {
+                    it->second.Update();
+                }
+            }
+        }
     }
 
     void HoorayApp::ProcessWindowFlags() {
@@ -620,6 +646,14 @@ namespace Hooray {
                 } else if constexpr (std::is_same_v<Tx, FontAsset>) {
                     Font font(item.path, item.baseSize);
                     m_fontMap.insert_or_assign(item.id, std::move(font));
+                } else if constexpr (std::is_same_v<Tx, MusicAsset>) {
+                    if (!::IsAudioDeviceReady()) InitAudioDevice();
+                    Music music(item.path);
+                    m_musicMap.insert_or_assign(item.id, std::move(music));
+                } else if constexpr (std::is_same_v<Tx, SoundAsset>) {
+                    if (!::IsAudioDeviceReady()) InitAudioDevice();
+                    Sound sound(item.path);
+                    m_soundMap.insert_or_assign(item.id, std::move(sound));
                 }
             }, asset);
         }
@@ -628,6 +662,8 @@ namespace Hooray {
     void HoorayApp::UnloadGlobalAssets() {
         m_textureMap.clear();
         m_fontMap.clear();
+        m_musicMap.clear();
+        m_soundMap.clear();
     }
 
     void HoorayApp::Quit() {
@@ -635,6 +671,17 @@ namespace Hooray {
     }
 
     HoorayApp::~HoorayApp() {
+
+        if (::IsAudioDeviceReady()) {
+            for (auto &music: m_musicMap | std::views::values) {
+                music = Music{};
+            }
+            for (auto &sound: m_soundMap | std::views::values) {
+                sound = Sound{};
+            }
+            ::CloseAudioDevice();
+        }
+
         if (::IsWindowReady()) {
             UnloadGlobalAssets();
             ::CloseWindow();

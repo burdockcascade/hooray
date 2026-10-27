@@ -1,7 +1,7 @@
 #pragma once
 #include <map>
 
-#include <hooray/scenegraph.hpp>
+#include <hooray/font.hpp>
 
 namespace Hooray {
 
@@ -15,6 +15,9 @@ namespace Hooray {
         HoorayApp& operator=(const HoorayApp&) = delete;
 
         int Run();
+
+        void InitMusicStreams();
+        void UpdateMusicStreams();
 
         void ProcessWindowFlags();
 
@@ -40,6 +43,8 @@ namespace Hooray {
         bool m_running = false;
         std::unordered_map<std::string, Texture> m_textureMap;
         std::unordered_map<std::string, Font> m_fontMap;
+        std::unordered_map<std::string, Music> m_musicMap;
+        std::unordered_map<std::string, Sound> m_soundMap;
     };
 
     inline int RunApp(AppConfig config) {
