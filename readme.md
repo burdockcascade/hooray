@@ -1,5 +1,11 @@
 # Hooray
 
+## Features
+* 2d and UI scenegraph
+* Audio playback
+* Input handling
+* Cross-platform (Windows, Linux, MacOS)
+
 ## Example
 ```cpp
 #include <hooray.hpp>
