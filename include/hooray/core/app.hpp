@@ -66,6 +66,8 @@ namespace hooray {
 
         int run();
 
+        void poll_and_dispatch_window_events();
+
     private:
         std::string title_ = "Hooray Application";
         int width_ = 800;

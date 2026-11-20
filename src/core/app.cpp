@@ -44,6 +44,8 @@ namespace hooray {
         while (running_ && !::WindowShouldClose()) {
             const float dt = ::GetFrameTime();
 
+            poll_and_dispatch_window_events();
+
             ::BeginDrawing();
             ::ClearBackground(to_raylib_color(bg_color_));
 
@@ -56,6 +58,70 @@ namespace hooray {
 
         ::CloseWindow();
         return 0;
+    }
+
+    void App::poll_and_dispatch_window_events() {
+
+        // Check Resize
+        if (::IsWindowResized()) {
+            width_ = ::GetScreenWidth();
+            height_ = ::GetScreenHeight();
+            for (auto& scene : scenes_) {
+                scene.handle_window_event(WindowEvent{
+                    .action = WindowAction::RESIZED,
+                    .width = width_,
+                    .height = height_
+                });
+            }
+        }
+
+        // Check Move
+        const ::Vector2 pos = ::GetWindowPosition();
+        if (pos.x != window_pos_.x || pos.y != window_pos_.y) {
+            window_pos_ = Vector2{.x = pos.x, .y = pos.y};
+            for (auto& scene : scenes_) {
+                scene.handle_window_event(WindowEvent{
+                    .action = WindowAction::MOVED,
+                    .pos_x = static_cast<int>(pos.x),
+                    .pos_y = static_cast<int>(pos.y)
+                });
+            }
+        }
+
+        // Check Focus
+        const bool is_focused = ::IsWindowFocused();
+        if (is_focused != window_focused_) {
+            window_focused_ = is_focused;
+            for (auto& scene : scenes_) {
+                scene.handle_window_event(WindowEvent{
+                    .action = is_focused ? WindowAction::FOCUS_GAINED : WindowAction::FOCUS_LOST
+                });
+            }
+        }
+
+        // Check Minimize / Restore
+        const bool is_minimized = ::IsWindowMinimized();
+        if (is_minimized != window_minimized_) {
+            window_minimized_ = is_minimized;
+            for (auto& scene : scenes_) {
+                scene.handle_window_event(WindowEvent{
+                    .action = is_minimized ? WindowAction::MINIMIZED : WindowAction::RESTORED
+                });
+            }
+        }
+
+        // Check Maximize / Unmaximize
+        const bool is_maximized = ::IsWindowMaximized();
+        if (is_maximized != window_maximized_) {
+            window_maximized_ = is_maximized;
+            for (auto& scene : scenes_) {
+                scene.handle_window_event(WindowEvent{
+                    .action = is_maximized ? WindowAction::MAXIMIZED : WindowAction::UNMAXIMIZED,
+                    .width = width_,
+                    .height = height_
+                });
+            }
+        }
     }
 
 }

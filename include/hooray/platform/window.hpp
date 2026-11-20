@@ -4,6 +4,43 @@
 
 namespace hooray {
 
+    enum class WindowAction {
+        RESIZED,
+        FOCUS_GAINED,
+        FOCUS_LOST,
+        MINIMIZED,
+        MAXIMIZED,
+        UNMAXIMIZED,
+        RESTORED,
+        MOVED,
+    };
+
+    constexpr std::string_view to_string(WindowAction action) noexcept {
+        switch (action) {
+            case WindowAction::RESIZED:      return "RESIZED";
+            case WindowAction::FOCUS_GAINED: return "FOCUS_GAINED";
+            case WindowAction::FOCUS_LOST:   return "FOCUS_LOST";
+            case WindowAction::MINIMIZED:    return "MINIMIZED";
+            case WindowAction::MAXIMIZED:    return "MAXIMIZED";
+            case WindowAction::UNMAXIMIZED:  return "UNMAXIMIZED";
+            case WindowAction::RESTORED:     return "RESTORED";
+            case WindowAction::MOVED:        return "MOVED";
+        }
+        return "UNKNOWN";
+    }
+
+    inline std::ostream& operator<<(std::ostream& os, WindowAction action) {
+        return os << to_string(action);
+    }
+
+    struct WindowEvent {
+        WindowAction action{WindowAction::RESIZED};
+        int width{0};   // New width of the window (only valid for RESIZED)
+        int height{0};  // New height of the window (only valid for RESIZED)
+        int pos_x{0};
+        int pos_y{0};
+    };
+
     enum class WindowFlags : uint32_t {
         NONE        = 0,
         RESIZABLE   = 1 << 0,
