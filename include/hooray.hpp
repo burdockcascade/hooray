@@ -8,3 +8,7 @@
 // Platform
 #include <hooray/platform/window.hpp>
 
+// Scenegraph
+#include <hooray/scenegraph/node.hpp>
+#include <hooray/scenegraph/scene.hpp>
+

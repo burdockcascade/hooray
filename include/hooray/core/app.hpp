@@ -6,6 +6,7 @@
 #include "color.hpp"
 #include "math.hpp"
 #include "hooray/platform/window.hpp"
+#include "hooray/scenegraph/scene.hpp"
 
 namespace hooray {
 
@@ -59,6 +60,10 @@ namespace hooray {
                       : disable_window_flag(WindowFlags::RESIZABLE);
         }
 
+        void add_scene(Scene scene) {
+            scenes_.push_back(std::move(scene));
+        }
+
         int run();
 
     private:
@@ -75,6 +80,8 @@ namespace hooray {
         bool window_minimized_ = false;
         bool window_maximized_ = false;
         Vector2 window_pos_{0, 0};
+
+        std::vector<Scene> scenes_;
 
     };
 
