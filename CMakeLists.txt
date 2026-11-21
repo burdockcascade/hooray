@@ -21,6 +21,10 @@ FetchContent_MakeAvailable(raylib)
 
 add_library(hooray STATIC
         src/core/app.cpp
+        src/assets/assetmanager.cpp
+        src/assets/audio.cpp
+        src/assets/font.cpp
+        src/assets/texture.cpp
 )
 
 target_include_directories(hooray PUBLIC

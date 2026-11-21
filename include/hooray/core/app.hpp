@@ -64,9 +64,15 @@ namespace hooray {
             scenes_.push_back(std::move(scene));
         }
 
+        AssetManager& get_asset_manager() {
+            return assetmanager_;
+        }
+
         int run();
 
         void poll_and_dispatch_window_events();
+
+        void execute_render_commands() const;
 
     private:
         std::string title_ = "Hooray Application";
@@ -84,6 +90,8 @@ namespace hooray {
         Vector2 window_pos_{0, 0};
 
         std::vector<Scene> scenes_;
+        AssetManager assetmanager_;
+        RenderCommandList render_commands_;
 
     };
 

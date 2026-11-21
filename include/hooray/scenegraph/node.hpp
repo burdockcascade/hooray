@@ -7,6 +7,9 @@
 #include "../core/math.hpp"
 
 namespace hooray {
+    class RenderCommandList;
+    class AssetManager;
+
     class Node {
     public:
         virtual ~Node() = default;
@@ -34,9 +37,9 @@ namespace hooray {
             return controller_.get();
         }
 
-        void init() {
+        void init(const AssetManager &assets) {
             if (controller_) controller_->on_init(*this);
-            on_init();
+            on_init(assets);
         }
 
         void update(float dt) {
@@ -45,11 +48,11 @@ namespace hooray {
             on_update(dt);
         }
 
-        void draw() {
+        void draw(RenderCommandList &cmds) {
             if (!visible_) return;
-            on_draw();
+            on_draw(cmds);
             if (controller_) {
-                controller_->on_draw(*this);
+                controller_->on_draw(*this, cmds);
             }
         }
 
@@ -67,13 +70,13 @@ namespace hooray {
         bool active_{true};
         bool visible_{true};
 
-        virtual void on_init() {
+        virtual void on_init(const AssetManager &assets) {
         }
 
         virtual void on_update(float dt) {
         }
 
-        virtual void on_draw() {
+        virtual void on_draw(RenderCommandList &cmds) {
         }
 
         virtual void on_destroy() {
