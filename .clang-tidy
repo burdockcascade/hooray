@@ -1,6 +1,7 @@
 Checks: '-*,readability-identifier-naming'
 WarningsAsErrors: ''
-HeaderFilterRegex: '.*'
+# Scope to your project's directories to avoid linting third-party headers
+HeaderFilterRegex: '^(include|src)/.*'
 FormatStyle: file
 
 CheckOptions:
@@ -31,6 +32,8 @@ CheckOptions:
     value: CamelCase
   - key: readability-identifier-naming.TypeTemplateParameterCase
     value: CamelCase
+  - key: readability-identifier-naming.ValueTemplateParameterCase
+    value: CamelCase
   - key: readability-identifier-naming.ConceptCase
     value: CamelCase
 
@@ -50,6 +53,8 @@ CheckOptions:
 
   # --- Class & Struct Members ---
   # Standard STL style uses a trailing underscore for private/protected members
+  - key: readability-identifier-naming.MemberCase
+    value: lower_case
   - key: readability-identifier-naming.PrivateMemberSuffix
     value: '_'
   - key: readability-identifier-naming.PrivateMemberCase
@@ -66,7 +71,9 @@ CheckOptions:
     value: UPPER_CASE
   - key: readability-identifier-naming.EnumConstantCase
     value: UPPER_CASE
-  - key: readability-identifier-naming.ConstantCase
-    value: UPPER_CASE
   - key: readability-identifier-naming.ConstexprVariableCase
+    value: UPPER_CASE
+  - key: readability-identifier-naming.GlobalConstantCase
+    value: UPPER_CASE
+  - key: readability-identifier-naming.StaticConstantCase
     value: UPPER_CASE
