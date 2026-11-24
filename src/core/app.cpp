@@ -4,6 +4,7 @@
 #include <hooray/platform/window.hpp>
 
 #include "../raylibtools.hpp"
+#include "hooray/assets/assetmanager.hpp"
 
 namespace hooray {
 
@@ -77,6 +78,7 @@ namespace hooray {
             scene.destroy();
         }
 
+        assetmanager_.unload_all();
         ::CloseWindow();
         return 0;
     }
