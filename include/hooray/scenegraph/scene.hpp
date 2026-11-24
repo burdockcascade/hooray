@@ -1,9 +1,11 @@
 #pragma once
 #include <vector>
+#include <hooray/platform/gamepad.hpp>
+#include <hooray/platform/keyboard.hpp>
+#include <hooray/platform/mouse.hpp>
 
 #include "layer.hpp"
 #include "node.hpp"
-#include "../assets/assetmanager.hpp"
 
 namespace hooray {
     class Scene : public Node {
@@ -48,6 +50,24 @@ namespace hooray {
         void on_destroy() override {
             for (auto &layer: layers_) {
                 std::visit([](auto &l) { l.destroy(); }, layer);
+            }
+        }
+
+        void on_key_event(const KeyEvent &event) override {
+            for (auto &layer: layers_) {
+                std::visit([&](auto &l) { l.handle_key_event(event); }, layer);
+            }
+        }
+
+        void on_mouse_event(const MouseEvent &event) override {
+            for (auto &layer: layers_) {
+                std::visit([&](auto &l) { l.handle_mouse_event(event); }, layer);
+            }
+        }
+
+        void on_gamepad_event(const GamepadEvent &event) override {
+            for (auto &layer: layers_) {
+                std::visit([&](auto &l) { l.handle_gamepad_event(event); }, layer);
             }
         }
 

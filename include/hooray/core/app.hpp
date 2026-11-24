@@ -5,6 +5,7 @@
 
 #include "color.hpp"
 #include "math.hpp"
+#include "hooray/assets/assetmanager.hpp"
 #include "hooray/platform/window.hpp"
 #include "hooray/scenegraph/scene.hpp"
 
@@ -71,6 +72,12 @@ namespace hooray {
         int run();
 
         void poll_and_dispatch_window_events();
+
+        void poll_and_dispatch_kb_input();
+
+        void poll_and_dispatch_mouse_input();
+
+        void poll_and_dispatch_gamepad_input();
 
         void execute_render_commands() const;
 

@@ -61,6 +61,24 @@ namespace hooray {
             on_window_event(event);
         }
 
+        void handle_key_event(KeyEvent event) {
+            if (!active_) return;
+            if (controller_) controller_->on_key_event(*this, event);
+            on_key_event(event);
+        }
+
+        void handle_mouse_event(MouseEvent event) {
+            if (!active_) return;
+            if (controller_) controller_->on_mouse_event(*this, event);
+            on_mouse_event(event);
+        }
+
+        void handle_gamepad_event(GamepadEvent event) {
+            if (!active_) return;
+            if (controller_) controller_->on_gamepad_event(*this, event);
+            on_gamepad_event(event);
+        }
+
         void destroy() {
             if (controller_) controller_->on_destroy(*this);
             on_destroy();
@@ -83,6 +101,15 @@ namespace hooray {
         }
 
         virtual void on_window_event(const WindowEvent &event) {
+        }
+
+        virtual void on_key_event(const KeyEvent &event) {
+        }
+
+        virtual void on_mouse_event(const MouseEvent &event) {
+        }
+
+        virtual void on_gamepad_event(const GamepadEvent &event) {
         }
 
         std::shared_ptr<IController> controller_{nullptr};

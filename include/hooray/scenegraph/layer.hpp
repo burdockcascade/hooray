@@ -10,7 +10,6 @@
 
 #include "node.hpp"
 #include "camera.hpp"
-#include "../assets/assetmanager.hpp"
 #include "hooray/render/drawcommands.hpp"
 
 namespace hooray {
@@ -108,6 +107,30 @@ namespace hooray {
             if (camera_) camera_->handle_window_event(event);
             for (auto &el: elements_) {
                 if (el) el->handle_window_event(event);
+            }
+        }
+
+        void on_key_event(const KeyEvent &event) override {
+            if (!is_active()) return;
+            if (camera_ && camera_->is_active()) camera_->handle_key_event(event); // Layer2D only
+            for (auto &elem : elements_) {
+                if (elem) elem->handle_key_event(event);
+            }
+        }
+
+        void on_mouse_event(const MouseEvent &event) override {
+            if (!is_active()) return;
+            if (camera_ && camera_->is_active()) camera_->handle_mouse_event(event); // Layer2D only
+            for (auto &elem : elements_) {
+                if (elem) elem->handle_mouse_event(event);
+            }
+        }
+
+        void on_gamepad_event(const GamepadEvent &event) override {
+            if (!is_active()) return;
+            if (camera_ && camera_->is_active()) camera_->handle_gamepad_event(event); // Layer2D only
+            for (auto &elem : elements_) {
+                if (elem) elem->handle_gamepad_event(event);
             }
         }
 
