@@ -4,7 +4,7 @@
 #include <vector>
 #include "hooray/core/color.hpp"
 #include "hooray/core/math.hpp"
-#include "hooray/assets/texture.hpp"
+#include "hooray/core/assets.hpp"
 
 namespace hooray {
 

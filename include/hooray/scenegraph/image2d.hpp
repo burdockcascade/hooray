@@ -1,7 +1,7 @@
 #pragma once
 
 #include "node.hpp"
-#include "../assets/assetmanager.hpp"
+#include "../core/assets.hpp"
 #include "../core/color.hpp"
 #include "hooray/render/drawcommands.hpp"
 

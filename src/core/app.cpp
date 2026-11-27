@@ -5,7 +5,7 @@
 #include "hooray/core/app.hpp"
 #include "hooray/platform/input.hpp"
 #include "../raylibtools.hpp"
-#include "hooray/assets/assetmanager.hpp"
+#include "hooray/core/assets.hpp"
 
 namespace hooray {
     namespace {

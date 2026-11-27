@@ -5,7 +5,7 @@
 
 #include "color.hpp"
 #include "math.hpp"
-#include "hooray/assets/assetmanager.hpp"
+#include "assets.hpp"
 #include "hooray/platform/window.hpp"
 #include "hooray/scenegraph/scene.hpp"
 

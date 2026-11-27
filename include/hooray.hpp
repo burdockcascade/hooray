@@ -1,9 +1,9 @@
 #pragma once
 
-#include <hooray/core/app.hpp>
-
 // Core
+#include <hooray/core/app.hpp>
 #include <hooray/core/color.hpp>
+#include <hooray/core/assets.hpp>
 
 // Platform
 #include <hooray/platform/input.hpp>

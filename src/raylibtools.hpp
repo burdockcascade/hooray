@@ -2,9 +2,7 @@
 #include <raylib.h>
 #include <hooray/scenegraph/camera.hpp>
 
-#include "hooray/assets/audio.hpp"
-#include "hooray/assets/font.hpp"
-#include "hooray/assets/texture.hpp"
+#include "hooray/core/assets.hpp"
 
 namespace hooray {
     inline ::Color to_raylib_color(Color c) {
