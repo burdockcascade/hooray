@@ -1,5 +1,35 @@
 #include <hooray.hpp>
 
+// A simple controller for the RectangleShape that moves it to the right over time
+class RectController : public hooray::Controller<hooray::RectangleShape> {
+public:
+    void on_update(hooray::RectangleShape &node, float dt) override {
+        auto transform = node.get_transform();
+        transform.position.x += 50.0f * dt; // Move right at 50 units per second
+        node.set_transform(transform);
+    }
+};
+
+// A simple controller for the CircleShape that moves it downwards over time
+class CirlceController : public hooray::Controller<hooray::CircleShape> {
+public:
+    void on_update(hooray::CircleShape &node, float dt) override {
+        auto transform = node.get_transform();
+        transform.position.y += 30.0f * dt; // Move down at 30 units per second
+        node.set_transform(transform);
+    }
+};
+
+// A simple controller for the TriangleShape that rotates it over time
+class TriangleController : public hooray::Controller<hooray::TriangleShape> {
+public:
+    void on_update(hooray::TriangleShape &node, float dt) override {
+        auto transform = node.get_transform();
+        transform.rotation += 45.0f * dt; // Rotate at 45 degrees per second
+        node.set_transform(transform);
+    }
+};
+
 int main() {
 
     // Create a rectangle shape
@@ -11,6 +41,7 @@ int main() {
     });
     rect.set_size(200.0f, 150.0f);
     rect.set_fill_color(hooray::colors::RED);
+    rect.set_controller(RectController());
 
     // Create a circle shape
     hooray::CircleShape circle;
@@ -21,6 +52,7 @@ int main() {
     });
     circle.set_radius(75.0f);
     circle.set_fill_color(hooray::colors::GREEN);
+    circle.set_controller(CirlceController());
 
     // Create a triangle shape
     hooray::TriangleShape triangle;
@@ -31,6 +63,7 @@ int main() {
     });
     triangle.set_points(hooray::Vector2{.x = 0.0f, .y = -50.0f}, hooray::Vector2{.x = -50.0f, .y = 50.0f}, hooray::Vector2{.x = 50.0f, .y = 50.0f});
     triangle.set_fill_color(hooray::colors::BLUE);
+    triangle.set_controller(TriangleController());
 
     // Create a camera for the layer
     hooray::Camera2D cam;
