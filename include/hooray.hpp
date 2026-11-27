@@ -16,4 +16,5 @@
 #include <hooray/scenegraph/scene.hpp>
 #include <hooray/scenegraph/layer.hpp>
 #include <hooray/scenegraph/image2d.hpp>
+#include <hooray/scenegraph/shapes2d.hpp>
 
