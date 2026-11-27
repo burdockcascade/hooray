@@ -58,14 +58,14 @@ namespace hooray {
             }
 
             // Inverse rotate by -_rotation (convert degrees to radians)
-            constexpr float kDegToRad = std::numbers::pi / 180.0f;
-            const float rad = -rotation_ * kDegToRad;
-            const float cosR = std::cos(rad);
-            const float sinR = std::sin(rad);
+            constexpr float K_DEG_TO_RAD = std::numbers::pi / 180.0f;
+            const float rad = -rotation_ * K_DEG_TO_RAD;
+            const float cos_r = std::cos(rad);
+            const float sin_r = std::sin(rad);
 
             return {
-                .x = (dx * cosR - dy * sinR) + target_.x,
-                .y = (dx * sinR + dy * cosR) + target_.y
+                .x = (dx * cos_r - dy * sin_r) + target_.x,
+                .y = (dx * sin_r + dy * cos_r) + target_.y
             };
         }
 
