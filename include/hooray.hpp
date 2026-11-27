@@ -6,9 +6,7 @@
 #include <hooray/core/color.hpp>
 
 // Platform
-#include <hooray/platform/gamepad.hpp>
-#include <hooray/platform/keyboard.hpp>
-#include <hooray/platform/mouse.hpp>
+#include <hooray/platform/input.hpp>
 #include <hooray/platform/window.hpp>
 
 // Scenegraph

@@ -3,8 +3,7 @@
 #include <utility>
 #include <array>
 #include "hooray/core/app.hpp"
-#include "hooray/platform/keyboard.hpp"
-#include "hooray/platform/mouse.hpp"
+#include "hooray/platform/input.hpp"
 #include "../raylibtools.hpp"
 #include "hooray/assets/assetmanager.hpp"
 

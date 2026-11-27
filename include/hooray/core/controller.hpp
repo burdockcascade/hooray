@@ -1,9 +1,7 @@
 #pragma once
 #include "../platform/window.hpp"
 #include "hooray/render/drawcommands.hpp"
-#include "hooray/platform/keyboard.hpp"
-#include "hooray/platform/mouse.hpp"
-#include "hooray/platform/gamepad.hpp"
+#include "hooray/platform/input.hpp"
 
 namespace hooray {
     class Node;

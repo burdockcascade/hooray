@@ -1,8 +1,6 @@
 #pragma once
 #include <vector>
-#include <hooray/platform/gamepad.hpp>
-#include <hooray/platform/keyboard.hpp>
-#include <hooray/platform/mouse.hpp>
+#include <hooray/platform/input.hpp>
 
 #include "layer.hpp"
 #include "node.hpp"
